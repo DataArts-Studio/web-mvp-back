@@ -8,6 +8,9 @@ public abstract class Identifier {
     private final String id;  
 
     protected Identifier(String id) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("Identifier는 null 또는 빈 값일 수 없습니다.");   
+        }
         this.id = id;
     }
 
@@ -21,5 +24,17 @@ public abstract class Identifier {
     public String getId() {
         return id;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // 동일 참조 체크
+        if (o == null || getClass() != o.getClass()) return false; // 타입 체크
+        Identifier that = (Identifier) o; // 타입 체크를 위한 다운 케스팅 
+        return id.equals(that.id); // 내부 id 값 비교
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
