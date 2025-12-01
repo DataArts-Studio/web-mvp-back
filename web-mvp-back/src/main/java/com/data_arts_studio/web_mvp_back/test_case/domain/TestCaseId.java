@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.testcase.domain;
+package com.data_arts_studio.web_mvp_back.test_case.domain;
 
 import com.data_arts_studio.web_mvp_back.shared.Identifier;
 
