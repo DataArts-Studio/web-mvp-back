@@ -21,19 +21,6 @@ public class TestRun extends BaseEntity {
         DomainValidators.requireNonNull(milestoneId, "MilestoneId는 null일 수 없습니다.");
         DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
         DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
-
-        // if (id == null) {
-        //     throw new IllegalArgumentException("TestRunId는 null일 수 없습니다.");
-        // }
-        // if (testCaseId == null) {
-        //     throw new IllegalArgumentException("TestCaseId는 null일 수 없습니다.");
-        // }
-        // if (milestoneId == null) {
-        //     throw new IllegalArgumentException("MilestoneId는 null일 수 없습니다.");
-        // }
-        // if (executedAt == null) {
-        //     throw new IllegalArgumentException("executedAt는 null일 수 없습니다.");
-        // }
         this.id = id;
         this.testCaseId = testCaseId;
         this.milestoneId = milestoneId;

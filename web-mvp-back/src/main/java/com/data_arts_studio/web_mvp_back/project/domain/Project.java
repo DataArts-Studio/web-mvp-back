@@ -14,14 +14,6 @@ public class Project extends BaseEntity {
         super();
         DomainValidators.requireNonNull(id, "ProjectId는 null일 수 없습니다.");
         DomainValidators.requireNonEmpty(name, "프로젝트 이름은 null 또는 빈 값일 수 없습니다.");
-
-        // // id 와 name 필수 값 검증 
-        // if (id == null) {
-        //     throw new IllegalArgumentException("ProjectId는 null일 수 없습니다."); 
-        // }
-        // if (name == null || name.isEmpty()) {
-        //     throw new IllegalArgumentException("프로젝트 이름은 null 또는 빈 값일 수 없습니다."); 
-        // }
         this.id = id;
         this.name = name;
         this.description = description;
