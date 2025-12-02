@@ -3,6 +3,7 @@ package com.data_arts_studio.web_mvp_back.test_run.domain;
 import java.time.LocalDateTime;
 import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
+import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 
 public class TestRun extends BaseEntity {
@@ -15,18 +16,24 @@ public class TestRun extends BaseEntity {
 
     public TestRun(TestRunId id, TestCaseId testCaseId, MilestoneId milestoneId, TestRunStatus status, LocalDateTime executedAt) {
         super();
-        if (id == null) {
-            throw new IllegalArgumentException("TestRunId는 null일 수 없습니다.");
-        }
-        if (testCaseId == null) {
-            throw new IllegalArgumentException("TestCaseId는 null일 수 없습니다.");
-        }
-        if (milestoneId == null) {
-            throw new IllegalArgumentException("MilestoneId는 null일 수 없습니다.");
-        }
-        if (executedAt == null) {
-            throw new IllegalArgumentException("executedAt는 null일 수 없습니다.");
-        }
+        DomainValidators.requireNonNull(id, "TestRunId는 null일 수 없습니다.");
+        DomainValidators.requireNonNull(testCaseId, "TestCaseId는 null일 수 없습니다.");
+        DomainValidators.requireNonNull(milestoneId, "MilestoneId는 null일 수 없습니다.");
+        DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
+        DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
+
+        // if (id == null) {
+        //     throw new IllegalArgumentException("TestRunId는 null일 수 없습니다.");
+        // }
+        // if (testCaseId == null) {
+        //     throw new IllegalArgumentException("TestCaseId는 null일 수 없습니다.");
+        // }
+        // if (milestoneId == null) {
+        //     throw new IllegalArgumentException("MilestoneId는 null일 수 없습니다.");
+        // }
+        // if (executedAt == null) {
+        //     throw new IllegalArgumentException("executedAt는 null일 수 없습니다.");
+        // }
         this.id = id;
         this.testCaseId = testCaseId;
         this.milestoneId = milestoneId;

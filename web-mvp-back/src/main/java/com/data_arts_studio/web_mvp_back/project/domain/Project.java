@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.project.domain;
 
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
+import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 
 public class Project extends BaseEntity {
     // 프로젝트 도메인 모델 스켈레톤
@@ -11,13 +12,16 @@ public class Project extends BaseEntity {
 
     public Project(ProjectId id, String name, String description, String ownerName) {
         super();
-        // id 와 name 필수 값 검증 
-        if (id == null) {
-            throw new IllegalArgumentException("ProjectId는 null일 수 없습니다."); 
-        }
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("프로젝트 이름은 null 또는 빈 값일 수 없습니다."); 
-        }
+        DomainValidators.requireNonNull(id, "ProjectId는 null일 수 없습니다.");
+        DomainValidators.requireNonEmpty(name, "프로젝트 이름은 null 또는 빈 값일 수 없습니다.");
+
+        // // id 와 name 필수 값 검증 
+        // if (id == null) {
+        //     throw new IllegalArgumentException("ProjectId는 null일 수 없습니다."); 
+        // }
+        // if (name == null || name.isEmpty()) {
+        //     throw new IllegalArgumentException("프로젝트 이름은 null 또는 빈 값일 수 없습니다."); 
+        // }
         this.id = id;
         this.name = name;
         this.description = description;

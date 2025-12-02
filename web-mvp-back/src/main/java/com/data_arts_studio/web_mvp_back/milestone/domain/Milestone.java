@@ -2,6 +2,7 @@ package com.data_arts_studio.web_mvp_back.milestone.domain;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
+import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 
 public class Milestone extends BaseEntity {
     // 마일스톤 도메인 모델 스켈레톤
@@ -13,15 +14,19 @@ public class Milestone extends BaseEntity {
 
     public Milestone(MilestoneId id, ProjectId projectId, String name, String description, MilestoneStatus status) {
         super();
-        if (id == null) {
-            throw new IllegalArgumentException("MilestoneId는 null일 수 없습니다.");
-        }
-        if (projectId == null) {
-            throw new IllegalArgumentException("ProjectId는 null일 수 없습니다.");
-        }
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("마일스톤 이름은 null 또는 빈 값일 수 없습니다.");
-        }
+        DomainValidators.requireNonNull(id, "MilestoneId는 null일 수 없습니다.");
+        DomainValidators.requireNonNull(projectId, "ProjectId는 null일 수 없습니다.");
+        DomainValidators.requireNonEmpty(name, "마일스톤 이름은 null 또는 빈 값일 수 없습니다.");
+        
+        // if (id == null) {
+        //     throw new IllegalArgumentException("MilestoneId는 null일 수 없습니다.");
+        // }
+        // if (projectId == null) {
+        //     throw new IllegalArgumentException("ProjectId는 null일 수 없습니다.");
+        // }
+        // if (name == null || name.isEmpty()) {
+        //     throw new IllegalArgumentException("마일스톤 이름은 null 또는 빈 값일 수 없습니다.");
+        // }
         this.id = id;
         this.projectId = projectId;
         this.name = name;
