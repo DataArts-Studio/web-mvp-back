@@ -10,7 +10,7 @@ public class TestSuite extends BaseEntity {
     private String name; // 테스트 스위트 이름
     private int sortOrder; // 프로젝트 내 노출/정렬 순서
 
-    public TestSuite(TestSuiteId id, ProjectId projectId, String name, int sortOrder) {
+    public TestSuite(TestSuiteId id, ProjectId projectId, String name, Integer sortOrder) {
         super();
         if (id == null) {
             throw new IllegalArgumentException("TestSuiteId는 null일 수 없습니다.");
@@ -21,6 +21,16 @@ public class TestSuite extends BaseEntity {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("테스트 스위트 이름은 null 또는 빈 값일 수 없습니다.");
         }
+
+        // sortOrder는 NOT NULL, DEFAULT 0, 음수 불가 하여야 한다.
+        if (sortOrder == null) {
+            this.sortOrder = 0;
+        } else if (sortOrder < 0) {
+            throw new IllegalArgumentException("sortOrder는 0 이상이어야 합니다.");
+        } else {
+            this.sortOrder = sortOrder;
+        }
+        
         this.id = id;
         this.projectId = projectId;
         this.name = name;
