@@ -3,7 +3,6 @@ package com.data_arts_studio.web_mvp_back.test_run.domain;
 import java.time.LocalDateTime;
 import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
-import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 
 public class TestRun extends BaseEntity {
@@ -16,11 +15,6 @@ public class TestRun extends BaseEntity {
 
     public TestRun(TestRunId id, TestCaseId testCaseId, MilestoneId milestoneId, TestRunStatus status, LocalDateTime executedAt) {
         super();
-        DomainValidators.requireNonNull(id, "TestRunId는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(testCaseId, "TestCaseId는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(milestoneId, "MilestoneId는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(executedAt, "executedAt는 null일 수 없습니다.");
         this.id = id;
         this.testCaseId = testCaseId;
         this.milestoneId = milestoneId;

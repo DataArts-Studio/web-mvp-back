@@ -2,7 +2,6 @@ package com.data_arts_studio.web_mvp_back.test_suite.domain;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
-import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 
 public class TestSuite extends BaseEntity {
     // 테스트 스위트 도메인 모델 스켈레톤
@@ -13,13 +12,10 @@ public class TestSuite extends BaseEntity {
 
     public TestSuite(TestSuiteId id, ProjectId projectId, String name, Integer sortOrder) {
         super();
-        DomainValidators.requireNonNull(id, "TestSuiteId는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(projectId, "ProjectId는 null일 수 없습니다.");
-        DomainValidators.requireNonEmpty(name, "테스트 스위트 이름은 null 또는 빈 값일 수 없습니다.");
         this.id = id;
         this.projectId = projectId;
         this.name = name;
-        this.sortOrder = DomainValidators.normalizeSortOrder(sortOrder);
+        this.sortOrder = sortOrder;
     }
     
     public TestSuiteId getId() {

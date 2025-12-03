@@ -1,19 +1,20 @@
 package com.data_arts_studio.web_mvp_back.project.domain;
 
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
-import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 
 public class Project extends BaseEntity {
     // 프로젝트 도메인 모델 스켈레톤
     private final ProjectId id; // 프로젝트 식별자
+    // private boolean isPravateMode; // 프라이빗 여부
+    // private String password; // 프라이빗 모드일 경우 비밀번호
     private String name; // 프로젝트 이름
     private String description; // 프로젝트 설명
     private String ownerName; // 프로젝트 소유자 이름
 
-    public Project(ProjectId id, String name, String description, String ownerName) {
+    public Project(ProjectId id, String name, String description, String ownerName) {  //boolean isPravateMode, String password,
         super();
-        DomainValidators.requireNonNull(id, "ProjectId는 null일 수 없습니다.");
-        DomainValidators.requireNonEmpty(name, "프로젝트 이름은 null 또는 빈 값일 수 없습니다.");
+        // this.isPravateMode = isPravateMode;
+        // this.password = password;
         this.id = id;
         this.name = name;
         this.description = description;

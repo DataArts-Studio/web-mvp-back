@@ -1,7 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_case.domain;
 
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
-import com.data_arts_studio.web_mvp_back.shared.DomainValidators;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 
 public class TestCase extends BaseEntity {
@@ -14,15 +13,11 @@ public class TestCase extends BaseEntity {
     public TestCase(TestCaseId id, TestSuiteId testSuiteId, String name, TestCaseStatus status, Integer sortOrder) {
         super();
         // 도메인 모델 검증 유틸 사용
-        DomainValidators.requireNonNull(id, "TestCaseId는 null일 수 없습니다.");
-        DomainValidators.requireNonNull(testSuiteId, "TestSuiteId는 null일 수 없습니다");
-        DomainValidators.requireNonEmpty(name, "테스트 케이스 이름은 null 또는 빈 값일 수 없습니다.");
-        DomainValidators.normalizeSortOrder(sortOrder);
         this.id = id;
         this.testSuiteId = testSuiteId;
         this.name = name;
         this.status = status;
-        this.sortOrder = DomainValidators.normalizeSortOrder(sortOrder);
+        this.sortOrder = sortOrder;
     }
 
     public TestCaseId getId() {
