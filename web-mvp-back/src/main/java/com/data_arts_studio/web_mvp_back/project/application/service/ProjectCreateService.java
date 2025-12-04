@@ -37,6 +37,7 @@ public class ProjectCreateService implements CreateProjectUseCase{
         Project project = new Project(
             projectId,
             command.name(),
+            command.password(),
             command.description(),
             command.ownerName()
         );
@@ -48,6 +49,7 @@ public class ProjectCreateService implements CreateProjectUseCase{
         return new ProjectResult(
             projectId.getId(),
             command.name(),
+            command.password(),
             command.description(),
             command.ownerName()
         );
