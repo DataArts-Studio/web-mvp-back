@@ -32,6 +32,7 @@ class ProjectCreateServiceTest  {
         // given
         CreateProjectCommand command = new CreateProjectCommand(
             "New Project",
+            "1234456",
             "설명",
             "uzi"
         );
@@ -47,16 +48,21 @@ class ProjectCreateServiceTest  {
         Project saved = projectCaptor.getValue();
         System.out.println("Saved Project ID: " + saved.getId().getId());
         System.out.println("Saved Project Name: " + saved.getName());
+        System.out.println("Saved Project Password: " + saved.getPassword());
+        System.out.println("Saved Project Description: " + saved.getDescription());
         System.out.println("Saved Project Owner: " + saved.getOwnerName());
         
         // 저장된 도메인 검증
         assertThat(saved.getName()).isEqualTo("New Project");
+        assertThat(saved.getPassword()).isEqualTo("1234456");
         assertThat(saved.getOwnerName()).isEqualTo("uzi");
         assertThat(saved.getDescription()).isEqualTo("설명");
 
         // 반환된 값 검증
         assertThat(result.getName()).isEqualTo("New Project");
         System.out.println("Returned Project Name: " + result.getName());
+        assertThat(result.getPassword()).isEqualTo("1234456");
+        System.out.println("Returned Project Password: " + result.getPassword());
         assertThat(result.getOwnerName()).isEqualTo("uzi");
         System.out.println("Returned Project Owner: " + result.getOwnerName());
         assertThat(result.getDescription()).isEqualTo("설명");
