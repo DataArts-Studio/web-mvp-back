@@ -4,14 +4,12 @@ package com.data_arts_studio.web_mvp_back.project.application.service;
 public class ProjectResult {
     private final String projectId;
     private final String name;
-    private final String password;
     private final String description;
     private final String ownerName;
 
-    public ProjectResult(String projectId, String name, String password, String description, String ownerName) {
+    public ProjectResult(String projectId, String name, String description, String ownerName) {
         this.projectId = projectId;
         this.name = name;
-        this.password = password;
         this.description = description;
         this.ownerName = ownerName;
     }
@@ -22,10 +20,6 @@ public class ProjectResult {
 
     public String getName() {
         return name;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getDescription() {
