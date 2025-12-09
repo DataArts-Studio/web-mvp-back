@@ -40,7 +40,7 @@ public class ProjectCreateValidator {
             if (password.length() < 4) {
                 throw new ProjectBusinessException(ProjectErrorCode.PROJECT_PASSWORD_TOO_SHORT);
             }
-            if (password.equals(passwordConfirm)) {
+            if (!password.equals(passwordConfirm)) {
                 throw new ProjectBusinessException(ProjectErrorCode.PROJECT_PASSWORD_MISMATCH);
             }
         }
