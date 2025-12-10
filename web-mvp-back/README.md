@@ -10,15 +10,39 @@
 ```shell
 src/main/java/com/dataarts/webmvpback
  ├── project
- │    ├── domain
- │    ├── application
- │    ├── infrastructure
- │    └── api
+ │   │
+ │   ├─ application                  // 유즈케이스 계층 (비즈니스 흐름 담당)
+ │   │   ├─ port
+ │   │   │   ├─ in                  // 입력 포트: 유즈케이스 정의 (Controller -> Service)
+ │   │   │   │   ├─ CreateProjectUseCase      // 프로젝트 생성 기능 인터페이스 (입력 포트) 
+ │   │   │   │   └─ CreateProjectCommand      // 유즈케이스 실행에 필요한 입력값 DTO
+ │   │   │   └─ out                 // 출력 포트: 인프라 호출 인터페이스 (Service -> Adapter)
+ │   │   │       ├─ SaveProjectPort          // 프로젝트 저장 요청 인터페이스
+ │   │   │       └─ CheckProjectNamePort     // 프로젝트 이름 중복 확인 인터페이스
+ │   │   │
+ │   │   ├─ service                 // 유즈케이스 구현체 (비즈니스 로직 핵심)
+ │   │   │   └─ ProjectCreateService        // CreateProjectUseCase 구현, 검증/도메인 생성/저장 처리
+ │   │   │
+ │   │   └─ validator               // 유즈케이스 입력 및 규칙 검증
+ │   │       └─ ProjectCreateValidator       // 프로젝트 생성 관련 검증 로직
+ │   │
+ │   ├─ domain                      // 순수 도메인 계층 (비즈니스 규칙)
+ │   │   ├─ Project                 // Aggregate Root: 핵심 엔티티, 비즈니스 상태, 행위 보유
+ │   │   └─ ProjectId               // VO: UUID 기반 프로젝트 식별자
+ │   │
+ │   └─ adapter                     // 외부 시스템과 연결
+ │       └─ out
+ │           └─ persistence         // 데이터베이스 어댑터
+ │               ├─ jpa
+ │               │   ├─ ProjectJpaEntity      // JPA 엔티티 - DB 테이블 매핑
+ │               │   └─ ProjectJpaRepository  // Spring Data JPA 인터페이스
+ │               │
+ │               ├─ ProjectPersistenceAdapter // SaveProjectPort 구현체 (DB 저장 실행)
+ │               │
+ │               └─ mapper
+ │                   └─ ProjectMapper         // Domain <-> JPA Entitiy 변환 전담
+ │
  ├── testcase
- │    ├── domain
- │    ├── application
- │    ├── infrastructure
- │    └── api
  ├── testsuite 
  ├── milestone
  └── shared
