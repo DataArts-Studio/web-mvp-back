@@ -1,73 +1,99 @@
 package com.data_arts_studio.web_mvp_back.project.application.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import com.data_arts_studio.web_mvp_back.project.application.port.in.CreateProjectCommand;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.CheckProjectNamePort;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.SaveProjectPort;
+import com.data_arts_studio.web_mvp_back.project.application.validator.ProjectBusinessException;
+import com.data_arts_studio.web_mvp_back.project.application.validator.ProjectCreateValidator;
 import com.data_arts_studio.web_mvp_back.project.domain.Project;
 
-class ProjectCreateServiceTest  {
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+class ProjectCreateServiceTest {
+
+    private ProjectCreateService projectCreateService;
     private CheckProjectNamePort checkProjectNamePort;
     private SaveProjectPort saveProjectPort;
-    private ProjectCreateService service;
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    @DisplayName("테스트 초기화")
     void setUp() {
+        // MOCK 인터페이스 생성
         checkProjectNamePort = mock(CheckProjectNamePort.class);
         saveProjectPort = mock(SaveProjectPort.class);
-        service = new ProjectCreateService(checkProjectNamePort, saveProjectPort);
+        passwordEncoder = mock(PasswordEncoder.class);
+
+        when(passwordEncoder.encode(any())).thenReturn("encoded_pw");
+
+        ProjectCreateValidator validator = new ProjectCreateValidator(checkProjectNamePort);
+        // 서비스 인스턴스 생성
+        projectCreateService = new ProjectCreateService(
+                saveProjectPort,
+                passwordEncoder,
+                validator
+        );
     }
 
     @Test
-    @DisplayName("프로젝스 생성 성공 - 도메인 생성 되야하고, 저장 포트 호출, ProjectResult가 반환되어지는지 확인")
-    void createProject_success() {
-        // given
+    void 프로젝트_이름_null이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-            "New Project",
-            "1234456",
-            "설명",
-            "uzi"
+                null, "1234", "1234", "설명", "uzi"
         );
 
-        // when
-        ProjectResult result = service.createProject(command);
-        System.out.println("Created Project ID: " + result.toString());
+        assertThatThrownBy(() -> projectCreateService.createProject(command))
+                .isInstanceOf(ProjectBusinessException.class);
+    }
 
-        // then - save 호출되는지 확인
-        ArgumentCaptor<Project> projectCaptor = ArgumentCaptor.forClass(Project.class);
-        verify(saveProjectPort, times(1)).save(projectCaptor.capture());
+    @Test
+    void 프로젝트_중복이면_예외() {
+        CreateProjectCommand command = new CreateProjectCommand(
+                "Project", "1234", "1234", "설명", "uzi"
+        );
 
-        Project saved = projectCaptor.getValue();
-        System.out.println("Saved Project ID: " + saved.getId().getId());
-        System.out.println("Saved Project Name: " + saved.getName());
-        System.out.println("Saved Project Password: " + saved.getPassword());
-        System.out.println("Saved Project Description: " + saved.getDescription());
-        System.out.println("Saved Project Owner: " + saved.getOwnerName());
-        
-        // 저장된 도메인 검증
-        assertThat(saved.getName()).isEqualTo("New Project");
-        assertThat(saved.getPassword()).isEqualTo("1234456");
-        assertThat(saved.getOwnerName()).isEqualTo("uzi");
-        assertThat(saved.getDescription()).isEqualTo("설명");
+        when(checkProjectNamePort.isProjectNameDuplicated("Project"))
+                .thenReturn(true);
 
-        // 반환된 값 검증
-        assertThat(result.getName()).isEqualTo("New Project");
-        System.out.println("Returned Project Name: " + result.getName());
-        assertThat(result.getPassword()).isEqualTo("1234456");
-        System.out.println("Returned Project Password: " + result.getPassword());
-        assertThat(result.getOwnerName()).isEqualTo("uzi");
-        System.out.println("Returned Project Owner: " + result.getOwnerName());
-        assertThat(result.getDescription()).isEqualTo("설명");
-        System.out.println("Returned Project Name: " + result.getName());
-        assertThat(result.getProjectId()).isNotNull(); 
-        System.out.println("Returned Project ID: " + result.getProjectId());
+        assertThatThrownBy(() -> projectCreateService.createProject(command))
+                .isInstanceOf(ProjectBusinessException.class);
+    }
+    @Test
+    void 비밀번호_null이면_예외() {
+        CreateProjectCommand command = new CreateProjectCommand(
+                "Project", null, null, "설명", "uzi"
+        );
+
+        assertThatThrownBy(() -> projectCreateService.createProject(command))
+                .isInstanceOf(ProjectBusinessException.class);
+    }
+    
+    @Test
+    void 비밀번호_불일치시_예외() {
+        CreateProjectCommand command = new CreateProjectCommand(
+                "Project", "1234", "5678", "설명", "uzi"
+        );
+
+        assertThatThrownBy(() -> projectCreateService.createProject(command))
+                .isInstanceOf(ProjectBusinessException.class);
+    }
+
+    @Test
+    void 정상입력이면_프로젝트_생성된다() {
+        CreateProjectCommand command = new CreateProjectCommand(
+                "Project", "1234", "1234", "설명", "uzi"
+        );
+
+        when(checkProjectNamePort.isProjectNameDuplicated("Project"))
+                .thenReturn(false);
+
+        projectCreateService.createProject(command);
+
+        verify(saveProjectPort, times(1)).save(any(Project.class));
     }
 }
