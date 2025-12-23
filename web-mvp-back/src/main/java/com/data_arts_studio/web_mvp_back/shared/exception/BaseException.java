@@ -11,10 +11,10 @@ public abstract class BaseException extends RuntimeException {
      * @param errorCode 내부에서 정의한 에러 코드
      * @param httpStatus 클라이언트에 반환될 HTTP 상태 코드
      */
-    public BaseException(String message, String errorCode, HttpStatus httpStatus) {
-        super(message);
-        this.errorCode = errorCode;
-        this.httpStatus = httpStatus;
+    protected BaseException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode.getErrorCode();
+        this.httpStatus = errorCode.getHttpStatus();
     }
 
     public String getErrorCode() {

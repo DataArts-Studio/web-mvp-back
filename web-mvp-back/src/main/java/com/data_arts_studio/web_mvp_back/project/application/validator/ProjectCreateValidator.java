@@ -20,7 +20,7 @@ public class ProjectCreateValidator {
 
         private void validateName(String name) {
             // 이름 빈 값 검증
-            if (name == null || name.isEmpty()) {
+            if (name == null || name.isBlank()) {
                 throw new ProjectBusinessException(ProjectErrorCode.PROJECT_NAME_EMPTY_VALUE);
             }
             // 이름 길이 검증
@@ -34,7 +34,7 @@ public class ProjectCreateValidator {
         }
 
         private void validatePassword(String password, String passwordConfirm) {
-            if (password == null || password.isEmpty()) {
+            if (password == null || password.isBlank()) {
                 throw new ProjectBusinessException(ProjectErrorCode.PROJECT_PASSWORD_EMPTY_VALUE);
             }
             if (password.length() < 4) {
