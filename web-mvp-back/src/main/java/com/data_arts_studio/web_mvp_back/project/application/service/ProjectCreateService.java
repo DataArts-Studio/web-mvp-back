@@ -40,12 +40,7 @@ public class ProjectCreateService implements CreateProjectUseCase {
     
 
         // 응답 DTO 반환
-        return new ProjectResult(
-            projectId.getId(),
-            command.name(),
-            command.description(),
-            command.ownerName()
-        );
+        return new ProjectResult(projectId.getId(), command.name(), command.description(), command.ownerName(), command.createdAt());
 
     }
 }

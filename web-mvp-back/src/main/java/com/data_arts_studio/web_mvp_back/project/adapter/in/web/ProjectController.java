@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
+
 
 @RestController
 @RequestMapping("api/projects")
@@ -32,17 +34,19 @@ public class ProjectController {
             request.password(),
             request.passwordConfirm(),
             request.description(),
-            request.ownerName()
+            request.ownerName(),
+                LocalDateTime.now()
         );
         // 서비스 호출
         var result = createProjectUseCase.createProject(command);
 
         // 결과를 응답 객체로 변환
         ProjectResponse response = new ProjectResponse(
-            result.getProjectId(),
-            result.getName(),
-            result.getDescription(),
-            result.getOwnerName()
+                result.projectId(),
+                result.name(),
+                result.description(),
+                result.ownerName(),
+                result.createdAt()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
