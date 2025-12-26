@@ -2,6 +2,9 @@ package com.data_arts_studio.web_mvp_back.project.application.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +47,7 @@ class ProjectCreateServiceTest {
     @Test
     void 프로젝트_이름_null이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                null, "1234", "1234", "설명", "uzi"
+                null, "1234", "1234", "설명", "uzi", LocalDateTime.now()
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -54,7 +57,7 @@ class ProjectCreateServiceTest {
     @Test
     void 프로젝트_중복이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "1234", "설명", "uzi"
+                "Project", "1234", "1234", "설명", "uzi", LocalDateTime.now()
         );
 
         when(checkProjectNamePort.isProjectNameDuplicated("Project"))
@@ -66,7 +69,7 @@ class ProjectCreateServiceTest {
     @Test
     void 비밀번호_null이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", null, null, "설명", "uzi"
+                "Project", null, null, "설명", "uzi", LocalDateTime.now()
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -76,7 +79,7 @@ class ProjectCreateServiceTest {
     @Test
     void 비밀번호_불일치시_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "5678", "설명", "uzi"
+                "Project", "1234", "5678", "설명", "uzi", LocalDateTime.now()
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -86,7 +89,7 @@ class ProjectCreateServiceTest {
     @Test
     void 정상입력이면_프로젝트_생성된다() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "1234", "설명", "uzi"
+                "Project", "1234", "1234", "설명", "uzi", LocalDateTime.now()
         );
 
         when(checkProjectNamePort.isProjectNameDuplicated("Project"))
