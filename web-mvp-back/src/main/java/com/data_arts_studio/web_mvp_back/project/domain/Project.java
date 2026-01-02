@@ -2,9 +2,8 @@ package com.data_arts_studio.web_mvp_back.project.domain;
 
 import java.time.LocalDateTime;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
-import lombok.Getter;
 
-@Getter
+
 public class Project extends BaseEntity {
     // 프로젝트 도메인 모델 스켈레톤
     private final ProjectId id; // 프로젝트 식별자
@@ -36,6 +35,26 @@ public class Project extends BaseEntity {
         this.restoreAuditFields(createdAt, updatedAt, deletedAt);
         
     }
+
+    public ProjectId getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getOwnerName() {
+        return ownerName;
+    }
+    public ProjectStatus getStatus() {
+        return status;
+    }
+
     // 프로젝트 수정
     public void rename (String newName) {
         this.name = newName;
