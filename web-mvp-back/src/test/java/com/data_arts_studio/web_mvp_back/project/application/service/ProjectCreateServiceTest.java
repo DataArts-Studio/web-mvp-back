@@ -16,6 +16,7 @@ import com.data_arts_studio.web_mvp_back.project.application.port.out.SaveProjec
 import com.data_arts_studio.web_mvp_back.project.application.validator.ProjectBusinessException;
 import com.data_arts_studio.web_mvp_back.project.application.validator.ProjectCreateValidator;
 import com.data_arts_studio.web_mvp_back.project.domain.Project;
+import com.data_arts_studio.web_mvp_back.project.domain.ProjectStatus;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -47,7 +48,7 @@ class ProjectCreateServiceTest {
     @Test
     void 프로젝트_이름_null이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                null, "1234", "1234", "설명", "uzi", LocalDateTime.now()
+                null, "1234", "1234", "설명", "uzi", ProjectStatus.ACTIVE, LocalDateTime.now() 
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -57,7 +58,7 @@ class ProjectCreateServiceTest {
     @Test
     void 프로젝트_중복이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "1234", "설명", "uzi", LocalDateTime.now()
+                "Project", "1234", "1234", "설명", "uzi",ProjectStatus.ACTIVE, LocalDateTime.now()
         );
 
         when(checkProjectNamePort.isProjectNameDuplicated("Project"))
@@ -69,7 +70,7 @@ class ProjectCreateServiceTest {
     @Test
     void 비밀번호_null이면_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", null, null, "설명", "uzi", LocalDateTime.now()
+                "Project", null, null, "설명", "uzi", ProjectStatus.ACTIVE, LocalDateTime.now()
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -79,7 +80,7 @@ class ProjectCreateServiceTest {
     @Test
     void 비밀번호_불일치시_예외() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "5678", "설명", "uzi", LocalDateTime.now()
+                "Project", "1234", "5678", "설명", "uzi", ProjectStatus.ACTIVE, LocalDateTime.now()
         );
 
         assertThatThrownBy(() -> projectCreateService.createProject(command))
@@ -89,7 +90,7 @@ class ProjectCreateServiceTest {
     @Test
     void 정상입력이면_프로젝트_생성된다() {
         CreateProjectCommand command = new CreateProjectCommand(
-                "Project", "1234", "1234", "설명", "uzi", LocalDateTime.now()
+                "Project", "1234", "1234", "설명", "uzi", ProjectStatus.ACTIVE, LocalDateTime.now()
         );
 
         when(checkProjectNamePort.isProjectNameDuplicated("Project"))
