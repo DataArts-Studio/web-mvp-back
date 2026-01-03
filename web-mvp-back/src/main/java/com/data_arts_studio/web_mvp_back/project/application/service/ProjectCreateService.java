@@ -35,7 +35,7 @@ public class ProjectCreateService implements CreateProjectUseCase {
         String hashedPassword = passwordEncoder.encode(command.password());
 
         // 도메인 객체 생성 후 저장
-        Project project = new Project(projectId, command.name(), hashedPassword, command.description(),command.ownerName());
+        Project project = new Project(projectId, command.name(), hashedPassword, command.description(),command.ownerName(), command.status());
         saveProjectPort.save(project);
     
 

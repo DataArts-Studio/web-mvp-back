@@ -1,5 +1,7 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.in.web.request;
 
+import com.data_arts_studio.web_mvp_back.project.domain.ProjectStatus;
+
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateProjectRequest(
@@ -7,6 +9,7 @@ public record CreateProjectRequest(
     @NotBlank String password,
     @NotBlank String passwordConfirm,
     String description,
-    String ownerName
+    String ownerName,
+    ProjectStatus status
 ) {
 }
