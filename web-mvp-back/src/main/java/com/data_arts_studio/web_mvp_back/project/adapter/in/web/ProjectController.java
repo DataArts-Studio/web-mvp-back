@@ -3,8 +3,11 @@ package com.data_arts_studio.web_mvp_back.project.adapter.in.web;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.data_arts_studio.web_mvp_back.project.adapter.in.web.request.ArchiveProjectRequest;
 import com.data_arts_studio.web_mvp_back.project.adapter.in.web.request.CreateProjectRequest;
 import com.data_arts_studio.web_mvp_back.project.adapter.in.web.response.ProjectResponse;
+import com.data_arts_studio.web_mvp_back.project.application.port.in.ArchiveProjectCommand;
+import com.data_arts_studio.web_mvp_back.project.application.port.in.ArchiveProjectUseCase;
 import com.data_arts_studio.web_mvp_back.project.application.port.in.CreateProjectCommand;
 import com.data_arts_studio.web_mvp_back.project.application.port.in.CreateProjectUseCase;
 
@@ -13,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,23 +29,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ProjectController {
     private final CreateProjectUseCase createProjectUseCase;
+    private final ArchiveProjectUseCase archiveProjectUseCase;
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@Valid @RequestBody CreateProjectRequest request) {
-        // 요청을 커맨드 객체로 변환
-        CreateProjectCommand command = new CreateProjectCommand(
-
-            request.name(),
-            request.password(),
-            request.passwordConfirm(),
-            request.description(),
-            request.ownerName(),
-                LocalDateTime.now()
-        );
-        // 서비스 호출
+        CreateProjectCommand command = new CreateProjectCommand(request.name(), request.password(), request.passwordConfirm(), request.description(), request.ownerName(),request.status(), LocalDateTime.now());
         var result = createProjectUseCase.createProject(command);
-
-        // 결과를 응답 객체로 변환
         ProjectResponse response = new ProjectResponse(
                 result.projectId(),
                 result.name(),
@@ -48,8 +42,14 @@ public class ProjectController {
                 result.ownerName(),
                 result.createdAt()
         );
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping("/{projectId}/archive")
+    public ResponseEntity<Void> archiveProject(@PathVariable String projectId, @Valid @RequestBody ArchiveProjectRequest request) {
+        ArchiveProjectCommand command = new ArchiveProjectCommand(projectId, request.confirmName(), LocalDateTime.now());
+        archiveProjectUseCase.archiveProject(command);
+        return ResponseEntity.noContent().build();
     }
     
 }
