@@ -15,6 +15,12 @@ public abstract class BaseEntity {
         this.deletedAt = null; // 삭제되지 않으면 null 처리 
     }
 
+    public void restoreAuditFields(LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
     public void markUpdated() {
         this.updatedAt = LocalDateTime.now();
     }
