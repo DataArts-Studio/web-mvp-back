@@ -1,9 +1,12 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.mapper;
 
+import org.springframework.stereotype.Component;
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.ProjectJpaEntity;
 import com.data_arts_studio.web_mvp_back.project.domain.Project;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 
+
+@Component
 public class ProjectMapper {
     // Domain Entity -> JPA Entity
     public static ProjectJpaEntity toJpaEntity(Project project) {
@@ -21,8 +24,7 @@ public class ProjectMapper {
     // JPA Entity -> Domain Entity
     public static Project toDomain(ProjectJpaEntity entity) {
         return new Project(
-            new ProjectId(
-            entity.getId()),
+            new ProjectId(entity.getId()),
             entity.getName(),
             entity.getPassword(),
             entity.getDescription(),
