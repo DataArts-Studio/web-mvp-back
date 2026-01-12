@@ -18,7 +18,7 @@ public class TestCase extends BaseEntity {
     private String expectedResult;// Expected Result 본문 전체 갱신용
     private int estimateMinutes; // 예상 소요 시간 (분 단위)
     private int sortOrder; // 테스트 스위트 내 노출/정렬 순서
-    private TestCasePriority priority;
+    private TestCasePriority priority; // 테스트 케이스 우선순위
 
 
     // 테스트 케이스 신규 생성용 생성자
