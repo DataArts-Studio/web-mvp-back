@@ -1,6 +1,8 @@
 package com.data_arts_studio.web_mvp_back.test_case.domain;
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
+import java.util.List;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
@@ -9,34 +11,23 @@ import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 public class TestCase extends BaseEntity {
     private final TestCaseId id; // 테스트 케이스 식별자
     private final ProjectId projectId; // 연관 프로젝트 식별자
+
     private TestSuiteId testSuiteId; // 연관 테스트 스위트 식별자 
+
     private String caseKey; // TC-1001 같은 표시용 키
     private String name; // 테스트 케이스 이름
     private String testType; // 테스트 유형 (기능 테스트, 회귀 테스트 등)
-    private String[] tags; // 태그 목록 (smoke, critical-path)
-    private final String steps; // Steps 본문 전체 갱신용
+    private List<String> tags; // 태그 목록 (smoke, critical-path)
+    private String preCondition; // 테스트 실행 전제조건
+    private String steps; // Steps 본문 전체 갱신용
     private String expectedResult;// Expected Result 본문 전체 갱신용
-    private int estimateMinutes; // 예상 소요 시간 (분 단위)
     private int sortOrder; // 테스트 스위트 내 노출/정렬 순서
-    private TestCasePriority priority; // 테스트 케이스 우선순위
 
+    private ResultStatus resultStatus; // 테스트 케이스 결과 상태 
 
     // 테스트 케이스 신규 생성용 생성자
-    public TestCase(TestCaseId id, ProjectId projectId, TestSuiteId testSuiteId, String name, String steps, String expectedResult, int estimateMinutes, Integer sortOrder) {
+    public TestCase(TestCaseId id, ProjectId projectId, TestSuiteId testSuiteId, String caseKey, String name, String testType, List<String> tags, String preCondition, String steps, String expectedResult, int sortOrder, ResultStatus resultStatus) {
         super();
-        // 도메인 모델 검증 유틸 사용
-        this.id = id;
-        this.projectId = projectId;
-        this.testSuiteId = testSuiteId;
-        this.name = name;
-        this.steps = steps;
-        this.expectedResult = expectedResult;
-        this.estimateMinutes = estimateMinutes;
-        this.sortOrder = sortOrder;
-    }
-
-    // 복원용 생성자
-    public TestCase(TestCaseId id, ProjectId projectId, TestSuiteId testSuiteId, String caseKey, String name, String testType, String[] tags, String steps, String expectedResult, int estimateMinutes, int sortOrder, TestCasePriority priority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.projectId = projectId;
         this.testSuiteId = testSuiteId;
@@ -44,12 +35,28 @@ public class TestCase extends BaseEntity {
         this.name = name;
         this.testType = testType;
         this.tags = tags;
+        this.preCondition = preCondition;
         this.steps = steps;
         this.expectedResult = expectedResult;
-        this.estimateMinutes = estimateMinutes;
         this.sortOrder = sortOrder;
-        this.priority = priority;
-        restoreAuditFields(createdAt, updatedAt, deletedAt);
+        this.resultStatus = resultStatus;
+    }
+
+    // 복원용 생성자
+    public TestCase(TestCaseId id, ProjectId projectId, TestSuiteId testSuiteId, String caseKey, String name, String testType, List<String> tags, String preCondition,String steps, String expectedResult, int sortOrder, ResultStatus resultStatus, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime archivedAt) {
+        this.id = id;
+        this.projectId = projectId;
+        this.testSuiteId = testSuiteId;
+        this.caseKey = caseKey;
+        this.name = name;
+        this.testType = testType;
+        this.tags = tags;
+        this.preCondition = preCondition;
+        this.steps = steps;
+        this.expectedResult = expectedResult;
+        this.sortOrder = sortOrder;
+        this.resultStatus = resultStatus;
+        restoreAuditFields(createdAt, updatedAt, archivedAt);
     }
 
     // 이름 변경
@@ -88,8 +95,11 @@ public class TestCase extends BaseEntity {
     public String getTestType() {
         return testType;
     }
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
+    }
+    public String getPreCondition() {
+        return preCondition;
     }
     public String getSteps() {
         return steps;
@@ -97,15 +107,10 @@ public class TestCase extends BaseEntity {
     public String getExpectedResult() {
         return expectedResult;
     }
-    public int getEstimateMinutes() {
-        return estimateMinutes;
-    }
     public int getSortOrder() {
         return sortOrder;
     }
-    public TestCasePriority getPriority() {
-        return priority;
-    } 
-
-
+    public ResultStatus getResultStatus() {
+        return resultStatus;
+    }
 }
