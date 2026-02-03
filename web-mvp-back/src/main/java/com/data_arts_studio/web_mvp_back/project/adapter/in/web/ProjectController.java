@@ -33,7 +33,12 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@Valid @RequestBody CreateProjectRequest request) {
-        CreateProjectCommand command = new CreateProjectCommand(request.name(), request.password(), request.passwordConfirm(), request.description(), request.ownerName(),request.status(), LocalDateTime.now());
+        CreateProjectCommand command = new CreateProjectCommand(
+            request.name(), 
+            request.identifier(), 
+            request.identifierConfirm(), 
+            request.description(), 
+            request.ownerName());
         var result = createProjectUseCase.createProject(command);
         ProjectResponse response = new ProjectResponse(
                 result.projectId(),
