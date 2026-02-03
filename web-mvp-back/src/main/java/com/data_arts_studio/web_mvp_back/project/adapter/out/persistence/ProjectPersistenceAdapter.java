@@ -1,13 +1,13 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence;
 
 import java.util.Optional;
-
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.ProjectJpaEntity;
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.ProjectJpaRepository;
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.mapper.ProjectMapper;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.CheckProjectNamePort;
+import com.data_arts_studio.web_mvp_back.project.application.port.out.CheckProjectSlugPort;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.LoadProjectPort;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.SaveProjectPort;
 import com.data_arts_studio.web_mvp_back.project.domain.Project;
@@ -16,10 +16,18 @@ import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import lombok.RequiredArgsConstructor;
 
 
-@Component
+@Repository
 @RequiredArgsConstructor
-public class ProjectPersistenceAdapter implements SaveProjectPort, CheckProjectNamePort, LoadProjectPort{
+public class ProjectPersistenceAdapter implements SaveProjectPort,
+                                                  CheckProjectSlugPort,
+                                                  CheckProjectNamePort, 
+                                                  LoadProjectPort
+                                                  
+                                                  {
+
+
     private final ProjectJpaRepository projectJpaRepository;
+    private final ProjectMapper projectMapper;
 
     @Override   
     public boolean isProjectNameDuplicated(String name) {
@@ -28,14 +36,20 @@ public class ProjectPersistenceAdapter implements SaveProjectPort, CheckProjectN
 
     @Override
     public void save(Project project) {
-        ProjectJpaEntity entity = ProjectMapper.toJpaEntity(project);
+        ProjectJpaEntity entity = projectMapper.toJpaEntity(project);
         projectJpaRepository.save(entity);
     }
 
     @Override
     public Optional<Project> loadById(ProjectId projectId) {
         return projectJpaRepository.findById(projectId.getId())
-                .map(ProjectMapper::toDomain);
+                .map(projectMapper::toDomain);
     }
+
+    @Override
+    public boolean existsBySlug(String slug) {
+        return projectJpaRepository.existsBySlug(slug);
+    }
+
     
 }
