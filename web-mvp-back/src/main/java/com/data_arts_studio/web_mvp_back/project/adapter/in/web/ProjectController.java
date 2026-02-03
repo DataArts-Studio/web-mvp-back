@@ -10,10 +10,8 @@ import com.data_arts_studio.web_mvp_back.project.application.port.in.ArchiveProj
 import com.data_arts_studio.web_mvp_back.project.application.port.in.ArchiveProjectUseCase;
 import com.data_arts_studio.web_mvp_back.project.application.port.in.CreateProjectCommand;
 import com.data_arts_studio.web_mvp_back.project.application.port.in.CreateProjectUseCase;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDateTime;
 
 
 @RestController
@@ -52,7 +49,7 @@ public class ProjectController {
 
     @PatchMapping("/{projectId}/archive")
     public ResponseEntity<Void> archiveProject(@PathVariable String projectId, @Valid @RequestBody ArchiveProjectRequest request) {
-        ArchiveProjectCommand command = new ArchiveProjectCommand(projectId, request.confirmName(), LocalDateTime.now());
+        ArchiveProjectCommand command = new ArchiveProjectCommand(projectId, request.confirmName());
         archiveProjectUseCase.archiveProject(command);
         return ResponseEntity.noContent().build();
     }
