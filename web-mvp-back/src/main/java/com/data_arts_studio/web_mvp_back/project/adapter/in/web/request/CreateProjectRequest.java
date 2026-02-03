@@ -1,15 +1,13 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.in.web.request;
 
-import com.data_arts_studio.web_mvp_back.project.domain.ProjectStatus;
-
 import jakarta.validation.constraints.NotBlank;
 
+// 프론트엔드에서 보낸 Json 데이터를 담을 객체 
 public record CreateProjectRequest(
     @NotBlank String name,
-    @NotBlank String password,
-    @NotBlank String passwordConfirm,
+    @NotBlank String identifier,
+    @NotBlank String identifierConfirm,
     String description,
-    String ownerName,
-    ProjectStatus status
+    String ownerName
 ) {
 }
