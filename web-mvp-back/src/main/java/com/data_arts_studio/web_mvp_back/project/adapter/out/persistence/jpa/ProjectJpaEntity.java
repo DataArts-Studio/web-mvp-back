@@ -1,9 +1,6 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa;
 
-import java.time.LocalDateTime;
-
-import com.data_arts_studio.web_mvp_back.project.domain.ProjectStatus;
-
+import java.time.OffsetDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -12,50 +9,59 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 // JPA 엔티티 클래스
-@Getter
 @Entity
 @Table(name = "projects")
+@Getter
 public class ProjectJpaEntity {
+
     @Id
     private String id; 
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
+    @Column(nullable = false, unique = true, length = 100)
+    private String slug;
+
     @Column(nullable = false)
-    private String password;
-    
+    private String identifier;
+
     @Column(columnDefinition = "text")
     private String description;
 
     @Column(name = "owner_name")
     private String ownerName;
 
-    @Column(nullable = false)
-    private ProjectStatus status;
-    
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
+    @Column(name = "archived_at")
+    private OffsetDateTime archivedAt;
 
     protected ProjectJpaEntity() {}
 
-    public ProjectJpaEntity(String id, String name, String password, String description, String ownerName, ProjectStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    public ProjectJpaEntity(
+        String id,
+        String name,
+        String slug,
+        String identifier,
+        String description,
+        String ownerName,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt,
+        OffsetDateTime archivedAt
+    ) {
         this.id = id;
         this.name = name;
-        this.password = password;
+        this.slug = slug;
+        this.identifier = identifier;
         this.description = description;
         this.ownerName = ownerName;
-        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
+        this.archivedAt = archivedAt;
     }
 }
-
