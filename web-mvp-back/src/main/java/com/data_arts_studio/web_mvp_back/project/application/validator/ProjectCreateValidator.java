@@ -15,7 +15,7 @@ public class ProjectCreateValidator {
 
     public void validate(CreateProjectCommand command) {
             validateName(command.name());
-            validatePassword(command.password(), command.passwordConfirm());
+            validatePassword(command.identifier(), command.identifierConfirm());
         }
 
         private void validateName(String name) {
