@@ -30,12 +30,12 @@ public class TestSuitePersistenceAdapter implements SaveTestSuitePort, CheckTest
     // 테스트 스위트 이름 중복 검사
     @Override
     public boolean isTestSuiteNameDuplicated(String projectId, String name) {
-        return testSuiteJpaRepository.existsByProjectIdAndNameAndDeletedAtIsNull(projectId, name);
+        return testSuiteJpaRepository.existsByProjectIdAndNameAndArchivedAtIsNull(projectId, name);
     }
     // 프로젝트 존재 여부 검사
     @Override
     public boolean existsById(String projectId) {
-       return projectJpaRepository.existsByIdAndDeletedAtIsNull(projectId);
+       return projectJpaRepository.existsByArchivedAtIsNullAndId(projectId);
     }
 
 
