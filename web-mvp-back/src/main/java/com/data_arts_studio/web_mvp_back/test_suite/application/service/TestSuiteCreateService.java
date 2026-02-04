@@ -21,14 +21,11 @@ public class TestSuiteCreateService implements CreateTestSuiteUseCase{
     private final SaveTestSuitePort saveTestSuitePort;
     @Override
     public TestSuiteResult createTestSuite(CreateTestSuiteCommand command) {
-        // 유효성 검사 
         testSuiteCreateValidator.validate(command);
-        TestSuiteId testSuiteId = TestSuiteId.create(); // TestSuite id 생성
-        // 도메인 객체 생성 후 저장
-        TestSuite testSuite = new TestSuite(testSuiteId, new ProjectId(command.projectId()), command.name(), 0);
+        String normalizedName = command.name().trim(); // 데이터 앞뒤 공백 제거
+        TestSuiteId testSuiteId = TestSuiteId.create(); 
+        TestSuite testSuite = new TestSuite(testSuiteId, new ProjectId(command.projectId()), normalizedName,command.description(), 0);
         saveTestSuitePort.save(testSuite);
-
-        // 응답 DTO 반환 
-        return new TestSuiteResult(testSuiteId.getId(), command.projectId(), command.name(), testSuite.getCreatedAt());
+        return new TestSuiteResult(testSuiteId.getId(), command.projectId(), testSuite.getName(), testSuite.getDescription(), testSuite.getCreatedAt());
     }
 }
