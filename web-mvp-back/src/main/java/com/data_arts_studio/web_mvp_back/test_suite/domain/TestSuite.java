@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
+import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 
 // 테스트 스위트 도메인 모델 스켈레톤
 public class TestSuite extends BaseEntity {
@@ -24,11 +25,14 @@ public class TestSuite extends BaseEntity {
         this.sortOrder = sortOrder;
     }
     // 기존 테스트 스위트 복원 시에 사용하는 생성자
-    public TestSuite(TestSuiteId id, ProjectId projectId, String name, int sortOrder, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime archivedAt) {
+    public TestSuite(TestSuiteId id, ProjectId projectId, String name, String description, int sortOrder,  LifecycleStatus lifecycleStatus, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime archivedAt) {
         this.id = id;
         this.projectId = projectId;
         this.name = name;
+        this.description = description;
         this.sortOrder = sortOrder;
+        this.lifecycleStatus = lifecycleStatus;
+        // BaseEntity의 감사 필드 복원 메서드 호출
         restoreAuditFields(createdAt, updatedAt, archivedAt);
     }
     // Getter 메서드
