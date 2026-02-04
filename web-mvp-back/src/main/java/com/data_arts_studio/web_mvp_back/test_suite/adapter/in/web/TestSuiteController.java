@@ -25,12 +25,17 @@ public class TestSuiteController {
 
     @PostMapping
     public ResponseEntity<CreateTestSuiteResponse> createTestSuite(@PathVariable String projectId, @RequestBody CreateTestSuiteRequest request) {
-        CreateTestSuiteCommand command = new CreateTestSuiteCommand(projectId, request.name());
+        CreateTestSuiteCommand command = CreateTestSuiteCommand.builder()
+        .projectId(projectId)
+        .name(request.name())
+        .description(request.description())
+        .build();
         TestSuiteResult result = createTestSuiteUseCase.createTestSuite(command);
         CreateTestSuiteResponse response = new CreateTestSuiteResponse(
                 result.id(),
                 result.projectId(),
                 result.name(),
+                result.description(),
                 result.createdAt()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
