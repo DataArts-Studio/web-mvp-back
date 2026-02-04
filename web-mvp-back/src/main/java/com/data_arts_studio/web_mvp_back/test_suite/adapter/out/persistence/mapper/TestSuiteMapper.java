@@ -13,13 +13,15 @@ public class TestSuiteMapper {
     // Domain Entity -> JPA Entity
     public static TestSuiteJpaEntity toJpaEntity(TestSuite testSuite) {
         return new TestSuiteJpaEntity(
-            testSuite.getId().getId().toString(), 
-            testSuite.getProjectId().getId().toString(), 
+            testSuite.getId().getId(),
+            testSuite.getProjectId().getId(), 
             testSuite.getName(), 
+            testSuite.getDescription(),
             testSuite.getSortOrder(), 
+            testSuite.getLifecycleStatus(),
             testSuite.getCreatedAt(), 
             testSuite.getUpdatedAt(), 
-            testSuite.getDeletedAt());
+            testSuite.getArchivedAt());
 
     }
     // JPA Entity -> Domain Entity
@@ -28,10 +30,12 @@ public class TestSuiteMapper {
             new TestSuiteId(entity.getId()),
             new ProjectId(entity.getProjectId()),
             entity.getName(),
+            entity.getDescription(),
             entity.getSortOrder(),
+            entity.getLifecycleStatus(),
             entity.getCreatedAt(),
             entity.getUpdatedAt(),
-            entity.getDeletedAt()
+            entity.getArchivedAt()
         );
         
     }
