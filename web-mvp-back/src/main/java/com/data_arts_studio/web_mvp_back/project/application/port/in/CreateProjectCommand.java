@@ -1,5 +1,7 @@
 package com.data_arts_studio.web_mvp_back.project.application.port.in;
 
+import lombok.Builder;
+
 /**
  * 프로젝트 생성 커맨드
  * @param name 프로젝트 이름 (1-50자)
@@ -8,6 +10,7 @@ package com.data_arts_studio.web_mvp_back.project.application.port.in;
  * @param description 프로젝트 설명 (필수 아님)
  * @param ownerName 소유자 이름 (필수 아님))
  */
+@Builder
 public record CreateProjectCommand(
     String name,
     String identifier, 

@@ -30,12 +30,14 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@Valid @RequestBody CreateProjectRequest request) {
-        CreateProjectCommand command = new CreateProjectCommand(
-            request.name(), 
-            request.identifier(), 
-            request.identifierConfirm(), 
-            request.description(), 
-            request.ownerName());
+        CreateProjectCommand command = CreateProjectCommand.builder()
+            .name(request.name())
+            .identifier(request.identifier())
+            .identifierConfirm(request.identifierConfirm())
+            .description(request.description())
+            .ownerName(request.ownerName())
+            .build();
+
         var result = createProjectUseCase.createProject(command);
         ProjectResponse response = new ProjectResponse(
                 result.projectId(),
