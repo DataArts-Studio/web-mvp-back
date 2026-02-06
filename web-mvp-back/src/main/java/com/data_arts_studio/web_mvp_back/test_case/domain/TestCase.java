@@ -31,6 +31,7 @@ public class TestCase extends BaseEntity {
                     TestSuiteId testSuiteId,
                     String caseKey,
                     String name,
+                    TestPriority priority,
                     String testType,
                     List<String> tags,
                     String preCondition,
@@ -44,6 +45,7 @@ public class TestCase extends BaseEntity {
         this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
         this.name = name;
+        this.priority = priority;
         this.testType = testType;
         this.tags = tags;
         this.preCondition = preCondition;
@@ -59,6 +61,7 @@ public class TestCase extends BaseEntity {
                     TestSuiteId testSuiteId,
                     String caseKey,
                     String name,
+                    TestPriority priority,
                     String testType,
                     List<String> tags,
                     String preCondition,
@@ -75,6 +78,7 @@ public class TestCase extends BaseEntity {
         this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
         this.name = name;
+        this.priority = priority;
         this.testType = testType;
         this.tags = tags;
         this.preCondition = preCondition;
@@ -101,6 +105,9 @@ public class TestCase extends BaseEntity {
     }
     public String getName() {
         return name;
+    }
+    public TestPriority getPriority() {
+        return priority;
     }
     public String getTestType() {
         return testType;
