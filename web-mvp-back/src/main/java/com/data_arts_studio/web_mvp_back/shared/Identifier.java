@@ -8,7 +8,7 @@ public abstract class Identifier {
     private final String id;  
 
     protected Identifier(String id) {
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("Identifier는 null 또는 빈 값일 수 없습니다.");   
         }
         this.id = id;
