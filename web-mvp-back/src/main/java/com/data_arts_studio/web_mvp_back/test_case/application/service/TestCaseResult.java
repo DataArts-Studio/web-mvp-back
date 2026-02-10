@@ -10,6 +10,7 @@ import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
  * @param id               테스트 케이스 ID
  * @param projectId        프로젝트 ID
  * @param testSuiteId     테스트 스위트 ID
+ * @param testSuiteName   테스트 스위트 이름
  * @param caseKey         테스트 케이스 키
  * @param name            테스트 케이스 이름
  * @param priority        테스트 케이스 우선순위
@@ -24,6 +25,7 @@ public record TestCaseResult(
     String id,         
     String projectId,     
     String testSuiteId,  
+    String testSuiteName,
     String caseKey,      
     String name,         
     TestPriority priority,
