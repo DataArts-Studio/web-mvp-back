@@ -4,6 +4,8 @@ import java.util.List;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
 
+import lombok.Builder;
+
 
 /**
  * 테스트 케이스 결과 서비스 모델
@@ -21,7 +23,8 @@ import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
  * @param steps           테스트 케이스 수행 단계
  * @param expectedResult  테스트 케이스 예상 결과
  */
-public record TestCaseResult(
+@Builder    
+public record CreateTestCaseResult(
     String id,         
     String projectId,     
     String testSuiteId,  
