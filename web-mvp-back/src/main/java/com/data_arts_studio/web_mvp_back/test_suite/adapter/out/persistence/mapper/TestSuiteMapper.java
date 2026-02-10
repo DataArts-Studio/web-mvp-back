@@ -11,7 +11,7 @@ import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 @Component
 public class TestSuiteMapper {
     // Domain Entity -> JPA Entity
-    public static TestSuiteJpaEntity toJpaEntity(TestSuite testSuite) {
+    public TestSuiteJpaEntity toJpaEntity(TestSuite testSuite) {
         return new TestSuiteJpaEntity(
             testSuite.getId().getId(),
             testSuite.getProjectId().getId(), 
@@ -25,7 +25,7 @@ public class TestSuiteMapper {
 
     }
     // JPA Entity -> Domain Entity
-    public static TestSuite toDomain(TestSuiteJpaEntity entity) {
+    public TestSuite toDomain(TestSuiteJpaEntity entity) {
         return new TestSuite(
             new TestSuiteId(entity.getId()),
             new ProjectId(entity.getProjectId()),
