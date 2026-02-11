@@ -8,6 +8,7 @@ import lombok.Builder;
 /**
  * 테스트 케이스 수정 커맨드
  * @param testCaseId     테스트 케이스 ID
+ * @param testSuiteId   테스트 스위트 ID
  * @param name          테스트 케이스 이름
  * @param priority      테스트 케이스 우선순위
  * @param testType      테스트 케이스 유형
@@ -19,6 +20,7 @@ import lombok.Builder;
 @Builder
 public record UpdateTestCaseCommand(
     String testCaseId,
+    String testSuiteId,
     String name,
     TestPriority priority,
     String testType,
