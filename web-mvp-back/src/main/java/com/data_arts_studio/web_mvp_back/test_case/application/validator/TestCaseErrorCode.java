@@ -8,7 +8,10 @@ import com.data_arts_studio.web_mvp_back.shared.exception.ErrorCode;
  */
 public enum TestCaseErrorCode implements ErrorCode{
     // 테스트 케이스 이름이 비어있음
-    TESTCASE_NAME_EMPTY_VALUE("TC40098", "테스트 케이스 제목을 입력해주세요.", HttpStatus.BAD_REQUEST);
+    TESTCASE_NAME_EMPTY_VALUE("TC40098", "테스트 케이스 제목을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    
+    // 수정할 테스트 케이스 ID를 찾을 수 없음
+    TESTCASE_ID_NOT_FOUND("TC40099", "수정할려는 테스트 케이스 ID를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
     private final String errorCode;
     private final String message;
