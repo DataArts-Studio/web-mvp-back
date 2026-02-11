@@ -36,7 +36,7 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
      */
 
     @Override
-    public TestCaseResult createTestCase(CreateTestCaseCommand command) {
+    public CreateTestCaseResult createTestCase(CreateTestCaseCommand command) {
         testCaseCreateValidator.validate(command);
         TestCaseId testCaseId = TestCaseId.create();
         String caseKey = generateCaseKeyPort.generateUniqueCaseKey();
@@ -62,7 +62,7 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
                 .orElse(null);
         }
 
-        return new TestCaseResult(
+        return new CreateTestCaseResult(
             testCaseId.getId(),
             command.projectId(),
             // testSuiteId가 null일 수 있으므로 조건부 처리
