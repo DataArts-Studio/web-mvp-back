@@ -4,12 +4,13 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
+import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 
 public class TestCase extends BaseEntity {
     private final TestCaseId id; // 테스트 케이스 식별자
     private final ProjectId projectId; // 연관 식별자 (ProjectId)
-    private final TestSuiteId testSuiteId; // 연관 식별자 (TestSuiteId)
+    private TestSuiteId testSuiteId; // 연관 식별자 (TestSuiteId)
 
     private String caseKey; // TC-1001 같은 표시용 키
     private String name; // 테스트 케이스 이름
@@ -28,7 +29,7 @@ public class TestCase extends BaseEntity {
     // 테스트 케이스를 생성할 때 사용하는 생성자
     public TestCase(TestCaseId id,
                     ProjectId projectId,
-                    TestSuiteId testSuiteId,
+                    String testSuiteId,
                     String caseKey,
                     String name,
                     TestPriority priority,
@@ -42,7 +43,8 @@ public class TestCase extends BaseEntity {
         super();
         this.id = id;
         this.projectId = projectId;
-        this.testSuiteId = testSuiteId;
+        // 빈 문자열은 스위트가 없는 것 (프로젝트 루트로 이동)
+        this.testSuiteId = (testSuiteId == null || testSuiteId.isBlank()) ? null : new TestSuiteId(testSuiteId);
         this.caseKey = caseKey;
         this.name = name;
         this.priority = priority;
@@ -71,7 +73,8 @@ public class TestCase extends BaseEntity {
                     ResultStatus resultStatus,
                     OffsetDateTime createdAt,
                     OffsetDateTime updatedAt,
-                    OffsetDateTime archivedAt
+                    OffsetDateTime archivedAt,
+                    LifecycleStatus lifecycleStatus
     ) {
         this.id = id;
         this.projectId = projectId;
@@ -88,6 +91,7 @@ public class TestCase extends BaseEntity {
         this.resultStatus = resultStatus;
         // BaseEntity의 감사 필드 복원 메서드 호출
         restoreAuditFields(createdAt, updatedAt, archivedAt);
+        this.lifecycleStatus = lifecycleStatus;
     }
 
     // Getter 메서드
@@ -133,13 +137,20 @@ public class TestCase extends BaseEntity {
     }
 
     // 테스트 케이스 세부 정보 업데이트 
-    public void updateDetails(String name,
+    public void updateDetails(String newSuiteId,
+                              String name,
                               TestPriority priority,
                               String testType,
                               List<String> tags,
                               String preCondition,
                               String steps,
                               String expectedResult) {
+        // 케이스가 suiteId가 null 또는 빈 값인 경우 처리
+        if (newSuiteId == null || newSuiteId.isBlank()) {
+            this.testSuiteId = null; // 소속 스위트 제거  (Root: Project로 이동)
+        } else { // 설정 받은 다른 스위트로 변경
+            this.testSuiteId = new TestSuiteId(newSuiteId);
+        }
         this.name = name;
         this.priority = priority;
         this.testType = testType;
