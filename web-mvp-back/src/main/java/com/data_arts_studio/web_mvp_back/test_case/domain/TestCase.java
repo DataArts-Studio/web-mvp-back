@@ -5,6 +5,8 @@ import java.util.List;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
+import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseBusinessException;
+import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseErrorCode;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 
 public class TestCase extends BaseEntity {
@@ -29,7 +31,7 @@ public class TestCase extends BaseEntity {
     // 테스트 케이스를 생성할 때 사용하는 생성자
     public TestCase(TestCaseId id,
                     ProjectId projectId,
-                    String testSuiteId,
+                    TestSuiteId testSuiteId,
                     String caseKey,
                     String name,
                     TestPriority priority,
@@ -38,15 +40,13 @@ public class TestCase extends BaseEntity {
                     String preCondition,
                     String steps,
                     String expectedResult,
-                    int sortOrder,
-                    ResultStatus resultStatus) {
+                    int sortOrder) {
         super();
         this.id = id;
         this.projectId = projectId;
-        // 빈 문자열은 스위트가 없는 것 (프로젝트 루트로 이동)
-        this.testSuiteId = (testSuiteId == null || testSuiteId.isBlank()) ? null : new TestSuiteId(testSuiteId);
+        this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
-        this.name = name;
+        this.name = validateName(name);
         this.priority = priority;
         this.testType = testType;
         this.tags = tags;
@@ -54,7 +54,7 @@ public class TestCase extends BaseEntity {
         this.steps = steps;
         this.expectedResult = expectedResult;
         this.sortOrder = sortOrder;
-        this.resultStatus = resultStatus.UNTESTED; // 기본값 미실행으로 설정
+        this.resultStatus = ResultStatus.UNTESTED; // 신규 생성은 항상 미실행 상태
     }
     // 이미 존재하는 데이터를 객체로 변환 시에 사용하는 생성자
     // Persistence Adapter에서 사용
@@ -80,7 +80,7 @@ public class TestCase extends BaseEntity {
         this.projectId = projectId;
         this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
-        this.name = name;
+        this.name = validateName(name);
         this.priority = priority;
         this.testType = testType;
         this.tags = tags;
@@ -137,7 +137,7 @@ public class TestCase extends BaseEntity {
     }
 
     // 테스트 케이스 세부 정보 업데이트 
-    public void updateDetails(String newSuiteId,
+    public void updateDetails(TestSuiteId newSuiteId,
                               String name,
                               TestPriority priority,
                               String testType,
@@ -145,13 +145,8 @@ public class TestCase extends BaseEntity {
                               String preCondition,
                               String steps,
                               String expectedResult) {
-        // 케이스가 suiteId가 null 또는 빈 값인 경우 처리
-        if (newSuiteId == null || newSuiteId.isBlank()) {
-            this.testSuiteId = null; // 소속 스위트 제거  (Root: Project로 이동)
-        } else { // 설정 받은 다른 스위트로 변경
-            this.testSuiteId = new TestSuiteId(newSuiteId);
-        }
-        this.name = name;
+        this.testSuiteId = newSuiteId;
+        this.name = validateName(name);
         this.priority = priority;
         this.testType = testType;
         this.tags = tags;
@@ -175,6 +170,14 @@ public class TestCase extends BaseEntity {
     // 테스트 케이스 아카이브
     public void archive() {
         this.markArchived();
+    }
+    
+    // 어떤 경로로 들어오던지 이름 검증
+    private String validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new TestCaseBusinessException(TestCaseErrorCode.TESTCASE_NAME_EMPTY_VALUE);
+        }
+        return name;
     }
     
 }
