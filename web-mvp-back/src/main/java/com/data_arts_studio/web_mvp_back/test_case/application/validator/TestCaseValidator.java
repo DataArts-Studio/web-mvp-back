@@ -1,6 +1,5 @@
 package com.data_arts_studio.web_mvp_back.test_case.application.validator;
 
-import org.h2.command.dml.Update;
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseCommand;
