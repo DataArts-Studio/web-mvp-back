@@ -40,9 +40,10 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
         testCaseCreateValidator.validate(command);
         TestCaseId testCaseId = TestCaseId.create();
         String caseKey = generateCaseKeyPort.generateUniqueCaseKey();
+        TestSuiteId testSuiteId = command.testSuiteId() == null ? null : new TestSuiteId(command.testSuiteId());
         TestCase testCase = new TestCase(testCaseId, 
                             new ProjectId(command.projectId()), 
-                            command.testSuiteId(), 
+                            testSuiteId, 
                                          caseKey, command.name(), 
                                          command.priority(), 
                                          command.testType(), 
@@ -50,14 +51,13 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
                                          command.preCondition(), 
                                          command.steps(), 
                                          command.expectedResult(), 
-                                         0, 
-                                         ResultStatus.UNTESTED);
+                                         0);
         saveTestCasePort.save(testCase);
 
         // 테스트 스위트 이름 불러오기 (있을 경우)
         String testSuiteName = null;
-        if (command.testSuiteId() != null && !command.testSuiteId().isBlank()) {
-            testSuiteName = loadTestSuitePort.loadById(new TestSuiteId(command.testSuiteId()))
+        if (testSuiteId != null) {
+            testSuiteName = loadTestSuitePort.loadById(testSuiteId)
                 .map(TestSuite::getName)
                 .orElse(null);
         }
