@@ -74,7 +74,7 @@ public class TestCaseController {
     // 테스트 케이스 단일 상세 조회
     @GetMapping("/{testCaseId}")
     public ResponseEntity<TestCaseDetailRespose> getTestCase(@PathVariable("projectId") String projectId, @PathVariable("testCaseId") String testCaseId) {
-        TestCaseDetailRespose response = getTestCaseUseCase.getTestCaseDetails(testCaseId);
+        TestCaseDetailRespose response = getTestCaseUseCase.getTestCaseDetails(projectId, testCaseId);
         return ResponseEntity.ok(response);
     }
     
