@@ -39,7 +39,7 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
     public CreateTestCaseResult createTestCase(CreateTestCaseCommand command) {
         testCaseCreateValidator.validate(command);
         TestCaseId testCaseId = TestCaseId.create();
-        String caseKey = generateCaseKeyPort.generateUniqueCaseKey();
+        String caseKey = generateCaseKeyPort.generateUniqueCaseKey(command.projectId());
         TestSuiteId testSuiteId = command.testSuiteId() == null ? null : new TestSuiteId(command.testSuiteId());
         TestCase testCase = new TestCase(testCaseId, 
                             new ProjectId(command.projectId()), 
