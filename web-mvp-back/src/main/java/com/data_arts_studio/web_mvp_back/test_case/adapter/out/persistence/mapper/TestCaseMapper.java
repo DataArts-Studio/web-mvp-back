@@ -1,5 +1,8 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.mapper;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
@@ -21,7 +24,7 @@ public class TestCaseMapper {
                 .name(testCase.getName())
                 .priority(testCase.getPriority()) 
                 .testType(testCase.getTestType())
-                .tags(testCase.getTags())
+                .tags(testCase.getTags() != null ? testCase.getTags().toArray(new String[0]) : null)
                 .preCondition(testCase.getPreCondition())
                 .steps(testCase.getSteps())
                 .expectedResult(testCase.getExpectedResult())
@@ -45,7 +48,7 @@ public class TestCaseMapper {
                 entity.getName(),
                 entity.getPriority(),
                 entity.getTestType(),
-                entity.getTags(),
+                entity.getTags() != null ? Arrays.asList(entity.getTags()) : List.of(),
                 entity.getPreCondition(),
                 entity.getSteps(),
                 entity.getExpectedResult(),
