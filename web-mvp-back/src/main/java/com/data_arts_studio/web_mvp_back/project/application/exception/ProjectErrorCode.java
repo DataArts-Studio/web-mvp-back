@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.project.application.validator;
+package com.data_arts_studio.web_mvp_back.project.application.exception;
 
 import org.springframework.http.HttpStatus;
 import com.data_arts_studio.web_mvp_back.shared.exception.ErrorCode;
