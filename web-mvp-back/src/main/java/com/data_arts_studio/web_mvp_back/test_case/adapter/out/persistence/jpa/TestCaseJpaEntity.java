@@ -1,27 +1,23 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "test_cases")
@@ -53,11 +49,9 @@ public class TestCaseJpaEntity {
     @Column(name = "test_type")
     private String testType;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "test_case_tags", joinColumns = @JoinColumn(name = "test_case_id"))
-    @Column(name = "tag")
-    @Builder.Default
-    private List<String> tags = new ArrayList<>();
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(name = "tags", columnDefinition = "text[]")
+    private String[] tags;
 
     @Column(name = "pre_condition", columnDefinition = "TEXT")
     private String preCondition;
@@ -67,6 +61,9 @@ public class TestCaseJpaEntity {
 
     @Column(name = "expected_result", columnDefinition = "TEXT")
     private String expectedResult;
+
+    @Column(name = "display_id")
+    private Integer displayId;
 
     @Column(name = "sort_order")
     private int sortOrder;
