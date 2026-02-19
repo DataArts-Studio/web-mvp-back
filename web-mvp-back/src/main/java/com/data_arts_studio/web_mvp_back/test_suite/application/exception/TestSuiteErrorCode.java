@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.test_suite.application.validator;
+package com.data_arts_studio.web_mvp_back.test_suite.application.exception;
 
 import org.springframework.http.HttpStatus;
 
