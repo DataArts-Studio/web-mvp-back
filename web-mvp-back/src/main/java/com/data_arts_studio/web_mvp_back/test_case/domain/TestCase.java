@@ -5,8 +5,8 @@ import java.util.List;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseBusinessException;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseErrorCode;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseBusinessException;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseErrorCode;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 
 public class TestCase extends BaseEntity {
@@ -172,7 +172,7 @@ public class TestCase extends BaseEntity {
         this.markArchived();
     }
     
-    // 어떤 경로로 들어오던지 이름 검증
+    // 어떤 경로로 들어오던지 이름 검증 
     private String validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new TestCaseBusinessException(TestCaseErrorCode.TESTCASE_NAME_EMPTY_VALUE);

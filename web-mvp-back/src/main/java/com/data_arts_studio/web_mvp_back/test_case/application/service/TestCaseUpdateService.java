@@ -7,8 +7,8 @@ import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTes
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseBusinessException;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseErrorCode;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseBusinessException;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseErrorCode;
 import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseValidator;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.LoadTestSuitePort;

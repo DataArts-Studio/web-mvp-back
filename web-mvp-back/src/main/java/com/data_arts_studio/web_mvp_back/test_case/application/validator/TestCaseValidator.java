@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseCommand;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseBusinessException;
+import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseErrorCode;
 
 @Component
 public class TestCaseValidator {
