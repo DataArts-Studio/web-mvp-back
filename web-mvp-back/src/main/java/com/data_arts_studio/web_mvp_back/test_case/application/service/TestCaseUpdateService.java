@@ -38,7 +38,6 @@ public class TestCaseUpdateService implements UpdateTestCaseUseCase{
         TestSuiteId testSuiteId = command.testSuiteId() == null ? null : new TestSuiteId(command.testSuiteId());
         testCase.updateDetails(testSuiteId,
                                command.name(), 
-                               command.priority(),
                                command.testType(),
                                command.tags(),
                                command.preCondition(), 
@@ -60,7 +59,6 @@ public class TestCaseUpdateService implements UpdateTestCaseUseCase{
             testSuiteName,
             testCase.getCaseKey(),
             testCase.getName(),
-            testCase.getPriority(),
             testCase.getTestType(),
             testCase.getResultStatus(),
             testCase.getTags(),

@@ -1,5 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.in.web;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,6 +9,7 @@ import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.request.Create
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.request.UpdateTestCaseRequest;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.CreateTestCaseResponse;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseDetailRespose;
+import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseListItemResponse;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.UpdateTestCaseResponse;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseCommand;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseUseCase;
@@ -15,8 +18,6 @@ import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTes
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.service.CreateTestCaseResult;
 import com.data_arts_studio.web_mvp_back.test_case.application.service.UpdateTestCaseResult;
-import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,6 @@ public class TestCaseController {
                     .projectId(projectId) 
                     .testSuiteId(normalizedTestSuiteId)
                     .name(request.name())
-                    .priority(TestPriority.MEDIUM) // 일단 기본 값 --- 나중에 요청에서 받도록 변경
                     .testType(request.testType())     
                     .tags(request.tags())             
                     .preCondition(request.preCondition()) 
@@ -71,6 +71,13 @@ public class TestCaseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 테스트 케이스 목록 조회 (프로젝트 단위)
+    @GetMapping
+    public ResponseEntity<List<TestCaseListItemResponse>> getProjectTestCases(@PathVariable("projectId") String projectId) {
+        List<TestCaseListItemResponse> response = getTestCaseUseCase.getProjectTestCases(projectId);
+        return ResponseEntity.ok(response);
+    }
+
     // 테스트 케이스 단일 상세 조회
     @GetMapping("/{testCaseId}")
     public ResponseEntity<TestCaseDetailRespose> getTestCase(@PathVariable("projectId") String projectId, @PathVariable("testCaseId") String testCaseId) {
@@ -91,7 +98,6 @@ public class TestCaseController {
                         .testCaseId(testCaseId)
                         .testSuiteId(normalizedTestSuiteId)
                         .name(request.name())
-                        .priority(TestPriority.MEDIUM) // 일단 기본 값 --- 나중에 요청에서 받도록 변경
                         .testType(request.testType())     
                         .tags(request.tags())             
                         .preCondition(request.preCondition()) 

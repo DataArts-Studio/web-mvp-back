@@ -2,9 +2,6 @@ package com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-
-import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
-
 import lombok.Builder;
 
 /**
@@ -16,7 +13,6 @@ import lombok.Builder;
  * @param name             테스트 케이스 이름
  * @param testSuiteId      소속 테스트 스위트 식별자
  * @param testSuiteName    소속 테스트 스위트 이름
- * @param priority         테스트 케이스 우선순위
  * @param testType         테스트 케이스 유형
  * @param createdAt        생성 일시
  * @param updatedAt        수정 일시
@@ -36,7 +32,6 @@ public record TestCaseDetailRespose(
     // 스위트 정보
     String testSuiteId,
     String testSuiteName,
-    TestPriority priority,
     String testType,
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,

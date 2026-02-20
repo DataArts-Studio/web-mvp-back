@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TestCaseJpaRepository extends JpaRepository<TestCaseJpaEntity, String> {
     List<TestCaseJpaEntity> findAllByProjectId(String projectId);
+    List<TestCaseJpaEntity> findAllByProjectIdOrderBySortOrderAscCreatedAtAsc(String projectId);
 }

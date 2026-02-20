@@ -22,7 +22,6 @@ public class TestCaseMapper {
                 .testSuiteId(testCase.getTestSuiteId() != null ? testCase.getTestSuiteId().getId() : null)
                 .caseKey(testCase.getCaseKey())
                 .name(testCase.getName())
-                .priority(testCase.getPriority()) 
                 .testType(testCase.getTestType())
                 .tags(testCase.getTags() != null ? testCase.getTags().toArray(new String[0]) : null)
                 .preCondition(testCase.getPreCondition())
@@ -46,7 +45,6 @@ public class TestCaseMapper {
                 entity.getTestSuiteId() != null ? new TestSuiteId(entity.getTestSuiteId()) : null,
                 entity.getCaseKey(),
                 entity.getName(),
-                entity.getPriority(),
                 entity.getTestType(),
                 entity.getTags() != null ? Arrays.asList(entity.getTags()) : List.of(),
                 entity.getPreCondition(),

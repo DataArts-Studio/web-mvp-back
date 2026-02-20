@@ -45,7 +45,6 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
                             new ProjectId(command.projectId()), 
                             testSuiteId, 
                                          caseKey, command.name(), 
-                                         command.priority(), 
                                          command.testType(), 
                                          command.tags(), 
                                          command.preCondition(), 
@@ -70,7 +69,6 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
             testSuiteName, // 조회한 이름 사용 (없으면 null)
             caseKey,
             command.name(),
-            command.priority(),
             command.testType(),
             ResultStatus.UNTESTED,
             command.tags(),

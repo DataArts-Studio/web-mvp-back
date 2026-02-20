@@ -1,7 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.request;
 
 import java.util.List;
-import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
 
 /**
  * 테스트 케이스 수정 요청 모델
@@ -17,7 +16,6 @@ import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
 public record UpdateTestCaseRequest(
     String testSuiteId,
     String name,
-    TestPriority priority,
     String testType,        
     List<String> tags,      
     String preCondition,    

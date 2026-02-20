@@ -4,8 +4,6 @@ import java.time.OffsetDateTime;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
-import com.data_arts_studio.web_mvp_back.test_case.domain.TestPriority;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -41,10 +39,6 @@ public class TestCaseJpaEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority")
-    private TestPriority priority;
 
     @Column(name = "test_type")
     private String testType;

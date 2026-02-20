@@ -17,7 +17,6 @@ public class TestCase extends BaseEntity {
     private String caseKey; // TC-1001 같은 표시용 키
     private String name; // 테스트 케이스 이름
 
-    private TestPriority priority; // 테스트 케이스 우선순위
     private String testType;// 테스트 케이스 분류 (기능, 동작, 회귀, 스모크)
     private List<String> tags; // 태그 목록 (예: smoke, critical-path)
 
@@ -34,7 +33,6 @@ public class TestCase extends BaseEntity {
                     TestSuiteId testSuiteId,
                     String caseKey,
                     String name,
-                    TestPriority priority,
                     String testType,
                     List<String> tags,
                     String preCondition,
@@ -47,7 +45,6 @@ public class TestCase extends BaseEntity {
         this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
         this.name = validateName(name);
-        this.priority = priority;
         this.testType = testType;
         this.tags = tags;
         this.preCondition = preCondition;
@@ -63,7 +60,6 @@ public class TestCase extends BaseEntity {
                     TestSuiteId testSuiteId,
                     String caseKey,
                     String name,
-                    TestPriority priority,
                     String testType,
                     List<String> tags,
                     String preCondition,
@@ -81,7 +77,6 @@ public class TestCase extends BaseEntity {
         this.testSuiteId = testSuiteId;
         this.caseKey = caseKey;
         this.name = validateName(name);
-        this.priority = priority;
         this.testType = testType;
         this.tags = tags;
         this.preCondition = preCondition;
@@ -110,9 +105,6 @@ public class TestCase extends BaseEntity {
     public String getName() {
         return name;
     }
-    public TestPriority getPriority() {
-        return priority;
-    }
     public String getTestType() {
         return testType;
     }
@@ -139,7 +131,6 @@ public class TestCase extends BaseEntity {
     // 테스트 케이스 세부 정보 업데이트 
     public void updateDetails(TestSuiteId newSuiteId,
                               String name,
-                              TestPriority priority,
                               String testType,
                               List<String> tags,
                               String preCondition,
@@ -147,7 +138,6 @@ public class TestCase extends BaseEntity {
                               String expectedResult) {
         this.testSuiteId = newSuiteId;
         this.name = validateName(name);
-        this.priority = priority;
         this.testType = testType;
         this.tags = tags;
         this.preCondition = preCondition;
