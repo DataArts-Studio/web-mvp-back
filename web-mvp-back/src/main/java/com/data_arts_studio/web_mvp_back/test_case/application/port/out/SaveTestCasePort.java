@@ -7,7 +7,7 @@ public interface SaveTestCasePort {
      * 테스트 케이스 도메인 엔티티를 저장
      * @param testCase 테스트 케이스 도메인 엔티티
      */
-    void save(TestCase testCase);
+    void createTestCase(TestCase testCase);
 
     /** 
      * 테스트 케이스 도메인 엔티티를 수정
