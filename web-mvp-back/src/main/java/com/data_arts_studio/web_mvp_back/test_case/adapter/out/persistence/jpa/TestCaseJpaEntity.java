@@ -44,7 +44,7 @@ public class TestCaseJpaEntity {
     private String testType;
 
     @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name = "tags", columnDefinition = "text[]")
+    @Column(name = "tags") // , columnDefinition = "text[]" // PostgreSQL의 배열 타입을 명시적으로 지정 (아마 이놈 때문인듯?)
     private String[] tags;
 
     @Column(name = "pre_condition", columnDefinition = "TEXT")
