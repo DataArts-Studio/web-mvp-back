@@ -9,7 +9,7 @@ import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTest
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseBusinessException;
 import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseErrorCode;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseValidator;
+import com.data_arts_studio.web_mvp_back.test_case.application.validator.UpdateTestCaseValidator;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.LoadTestSuitePort;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuite;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class TestCaseUpdateService implements UpdateTestCaseUseCase{
     private final LoadTestCasePort loadTestCasePort;
     private final SaveTestCasePort saveTestCasePort;
-    private final TestCaseValidator testCaseUpdateValidator;
+    private final UpdateTestCaseValidator testCaseUpdateValidator;
     private final LoadTestSuitePort loadTestSuitePort;
 
     @Override
@@ -43,7 +43,7 @@ public class TestCaseUpdateService implements UpdateTestCaseUseCase{
                                command.preCondition(), 
                                command.steps(),
                                command.expectedResult());
-        saveTestCasePort.save(testCase);
+        saveTestCasePort.updateTestCase(testCase);
 
         // 테스트 스위트 이름 불러오기 (있을 경우)
         String testSuiteName = null;

@@ -8,7 +8,7 @@ import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTes
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.GenerateCaseKeyPort;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
-import com.data_arts_studio.web_mvp_back.test_case.application.validator.TestCaseValidator;
+import com.data_arts_studio.web_mvp_back.test_case.application.validator.CreateTestCaseValidator;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCase;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class TestCaseCreateService implements CreateTestCaseUseCase{
     private final SaveTestCasePort saveTestCasePort;
     private final GenerateCaseKeyPort generateCaseKeyPort;
-    private final TestCaseValidator testCaseCreateValidator;
+    private final CreateTestCaseValidator testCaseCreateValidator;
 
     private final LoadTestSuitePort loadTestSuitePort;
 
@@ -51,8 +51,7 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
                                          command.steps(), 
                                          command.expectedResult(), 
                                          0);
-        saveTestCasePort.save(testCase);
-
+        saveTestCasePort.createTestCase(testCase);
         // 테스트 스위트 이름 불러오기 (있을 경우)
         String testSuiteName = null;
         if (testSuiteId != null) {
