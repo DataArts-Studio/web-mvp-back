@@ -1,8 +1,9 @@
 package com.data_arts_studio.web_mvp_back.test_case.application.service;
 
+import java.util.List;
+import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseListItemResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseDetailRespose;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.GetTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTestCasePort;
@@ -24,6 +25,7 @@ public class TestCaseGetService implements GetTestCaseUseCase {
     private final LoadTestCasePort loadTestCasePort;
     private final LoadTestSuitePort loadTestSuitePort;
 
+    // 특정 테스트 케이스 상세 조회
     @Override
     public TestCaseDetailRespose getTestCaseDetails(String projectId, String testCaseId) {
         TestCase testCase = loadTestCasePort.loadTestCase(new TestCaseId(testCaseId))
@@ -50,7 +52,6 @@ public class TestCaseGetService implements GetTestCaseUseCase {
                 .name(testCase.getName())
                 .testSuiteId(testCase.getTestSuiteId() != null ? testCase.getTestSuiteId().getId() : null)
                 .testSuiteName(testSuiteName)
-                .priority(testCase.getPriority())
                 .testType(testCase.getTestType())
                 .createdAt(testCase.getCreatedAt())
                 .updatedAt(testCase.getUpdatedAt())
@@ -59,5 +60,17 @@ public class TestCaseGetService implements GetTestCaseUseCase {
                 .steps(testCase.getSteps())
                 .expectedResult(testCase.getExpectedResult())
                 .build();
+    }
+
+    // 프로젝트 내 모든 테스트 케이스 조회
+    @Override
+    public List<TestCaseListItemResponse> getProjectTestCases(String projectId) {
+        return loadTestCasePort.loadByProjectId(projectId).stream()
+                .map((TestCase testCase) -> new TestCaseListItemResponse(
+                        testCase.getId().getId(),
+                        testCase.getProjectId().getId(),
+                        testCase.getName(),
+                        testCase.getUpdatedAt() != null ? testCase.getUpdatedAt() : testCase.getCreatedAt()))
+                .toList();
     }
 }
