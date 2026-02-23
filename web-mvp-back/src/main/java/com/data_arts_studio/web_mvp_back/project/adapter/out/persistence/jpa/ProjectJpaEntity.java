@@ -20,9 +20,6 @@ public class ProjectJpaEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String slug;
-
     @Column(nullable = false)
     private String identifier;
 
@@ -46,7 +43,6 @@ public class ProjectJpaEntity {
     public ProjectJpaEntity(
         String id,
         String name,
-        String slug,
         String identifier,
         String description,
         String ownerName,
@@ -56,7 +52,6 @@ public class ProjectJpaEntity {
     ) {
         this.id = id;
         this.name = name;
-        this.slug = slug;
         this.identifier = identifier;
         this.description = description;
         this.ownerName = ownerName;

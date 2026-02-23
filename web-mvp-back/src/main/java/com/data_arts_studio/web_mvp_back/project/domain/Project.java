@@ -8,26 +8,23 @@ public class Project extends BaseEntity {
     // 프로젝트 도메인 모델 스켈레톤
     private final ProjectId id; // 프로젝트 식별자
     private String name; // 프로젝트 이름
-    private ProjectSlug slug; // 프로젝트 슬러그
     private String identifier; //프로젝트의 해시된 비밀번호 
     private String description; // 프로젝트 설명
     private String ownerName; // 프로젝트 소유자 이름
 
     // 프로젝트 생성용 생성자
-    public Project(ProjectId id, String name, ProjectSlug slug,String identifier ,String description, String ownerName) { 
+    public Project(ProjectId id, String name, String identifier ,String description, String ownerName) { 
         super();
         this.id = id;
         this.name = name;
-        this.slug = slug;
         this.identifier = identifier;
         this.description = description;
         this.ownerName = ownerName;
     }
     // JPA 리스톨용 생성자
-    public Project(ProjectId id, String name, ProjectSlug slug,String identifier ,String description, String ownerName, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime archivedAt) { 
+    public Project(ProjectId id, String name, String identifier ,String description, String ownerName, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime archivedAt) { 
         this.id = id;
         this.name = name;
-        this.slug = slug;
         this.identifier = identifier;
         this.description = description;
         this.ownerName = ownerName;
@@ -41,20 +38,15 @@ public class Project extends BaseEntity {
     public String getName() {
         return name;
     }
-    public ProjectSlug getSlug() {
-        return slug;
-    }
     public String getIdentifier() { 
         return identifier;
     }
-
     public String getDescription() {
         return description;
     }
     public String getOwnerName() {
         return ownerName;
     }
-
     // 프로젝트 이름 수정
     public void rename (String newName) {
         this.name = newName;

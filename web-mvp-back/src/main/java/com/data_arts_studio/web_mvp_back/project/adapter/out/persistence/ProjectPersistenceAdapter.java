@@ -7,7 +7,6 @@ import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.Pro
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.ProjectJpaRepository;
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.mapper.ProjectMapper;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.CheckProjectNamePort;
-import com.data_arts_studio.web_mvp_back.project.application.port.out.CheckProjectSlugPort;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.LoadProjectPort;
 import com.data_arts_studio.web_mvp_back.project.application.port.out.SaveProjectPort;
 import com.data_arts_studio.web_mvp_back.project.domain.Project;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ProjectPersistenceAdapter implements SaveProjectPort,
-                                                  CheckProjectSlugPort,
                                                   CheckProjectNamePort, 
                                                   LoadProjectPort
                                                   
@@ -44,11 +42,6 @@ public class ProjectPersistenceAdapter implements SaveProjectPort,
     public Optional<Project> loadById(ProjectId projectId) {
         return projectJpaRepository.findById(projectId.getId())
                 .map(projectMapper::toDomain);
-    }
-
-    @Override
-    public boolean existsBySlug(String slug) {
-        return projectJpaRepository.existsBySlug(slug);
     }
 
     
