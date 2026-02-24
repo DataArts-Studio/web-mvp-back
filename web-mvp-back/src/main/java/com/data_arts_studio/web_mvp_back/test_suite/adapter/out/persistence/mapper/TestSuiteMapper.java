@@ -12,16 +12,17 @@ import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 public class TestSuiteMapper {
     // Domain Entity -> JPA Entity
     public TestSuiteJpaEntity toJpaEntity(TestSuite testSuite) {
-        return new TestSuiteJpaEntity(
-            testSuite.getId().getId(),
-            testSuite.getProjectId().getId(), 
-            testSuite.getName(), 
-            testSuite.getDescription(),
-            testSuite.getSortOrder(), 
-            testSuite.getLifecycleStatus(),
-            testSuite.getCreatedAt(), 
-            testSuite.getUpdatedAt(), 
-            testSuite.getArchivedAt());
+        return TestSuiteJpaEntity.builder()
+                .id(testSuite.getId().getId())
+                .projectId(testSuite.getProjectId().getId())
+                .name(testSuite.getName())
+                .description(testSuite.getDescription())
+                .sortOrder(testSuite.getSortOrder())
+                .lifecycleStatus(testSuite.getLifecycleStatus())
+                .createdAt(testSuite.getCreatedAt())
+                .updatedAt(testSuite.getUpdatedAt())
+                .archivedAt(testSuite.getArchivedAt())
+                .build();
 
     }
     // JPA Entity -> Domain Entity

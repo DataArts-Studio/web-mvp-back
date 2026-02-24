@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "test_suites")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class TestSuiteJpaEntity {
 
     @Id
