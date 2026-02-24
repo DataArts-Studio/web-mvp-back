@@ -6,12 +6,17 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 // JPA 엔티티 클래스
 @Entity
 @Table(name = "projects")
 @Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProjectJpaEntity {
 
     @Id
@@ -37,26 +42,4 @@ public class ProjectJpaEntity {
 
     @Column(name = "archived_at")
     private OffsetDateTime archivedAt;
-
-    protected ProjectJpaEntity() {}
-
-    public ProjectJpaEntity(
-        String id,
-        String name,
-        String identifier,
-        String description,
-        String ownerName,
-        OffsetDateTime createdAt,
-        OffsetDateTime updatedAt,
-        OffsetDateTime archivedAt
-    ) {
-        this.id = id;
-        this.name = name;
-        this.identifier = identifier;
-        this.description = description;
-        this.ownerName = ownerName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.archivedAt = archivedAt;
-    }
 }
