@@ -32,7 +32,7 @@ public class ProjectCreateService implements CreateProjectUseCase {
         ProjectId projectId = ProjectId.create();       
         String hashedPassword = passwordEncoder.encode(command.identifier());
         Project project = new Project(projectId, command.name() ,hashedPassword, command.description(),command.ownerName());
-        saveProjectPort.save(project);
+        saveProjectPort.createProject(project);
         return new ProjectResult(projectId.getId(), project.getName(), project.getDescription(), project.getOwnerName(), project.getCreatedAt());
     }
 }
