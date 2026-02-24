@@ -6,8 +6,8 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "projects")
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor (access = lombok.AccessLevel.PRIVATE)
+@Builder
 public class ProjectJpaEntity {
 
     @Id

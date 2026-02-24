@@ -11,16 +11,16 @@ public class ProjectMapper {
 
     // Domain -> JPA
     public ProjectJpaEntity toJpaEntity(Project project) {
-        return new ProjectJpaEntity(
-            project.getId().getId().toString(),
-            project.getName(),
-            project.getIdentifier(),           
-            project.getDescription(),
-            project.getOwnerName(),
-            project.getCreatedAt(),
-            project.getUpdatedAt(),
-            project.getArchivedAt()
-        );
+        return ProjectJpaEntity.builder()
+                .id(project.getId().getId().toString())
+                .name(project.getName())
+                .identifier(project.getIdentifier())
+                .description(project.getDescription())
+                .ownerName(project.getOwnerName())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
+                .archivedAt(project.getArchivedAt())
+                .build();
     }
 
     // JPA -> Domain
