@@ -25,7 +25,7 @@ public class TestSuiteCreateService implements CreateTestSuiteUseCase{
         String normalizedName = command.name().trim(); // 데이터 앞뒤 공백 제거
         TestSuiteId testSuiteId = TestSuiteId.create(); 
         TestSuite testSuite = new TestSuite(testSuiteId, new ProjectId(command.projectId()), normalizedName,command.description(), 0);
-        saveTestSuitePort.save(testSuite);
+        saveTestSuitePort.createTestSuite(testSuite);
         return new TestSuiteResult(testSuiteId.getId(), command.projectId(), testSuite.getName(), testSuite.getDescription(), testSuite.getCreatedAt());
     }
 }
