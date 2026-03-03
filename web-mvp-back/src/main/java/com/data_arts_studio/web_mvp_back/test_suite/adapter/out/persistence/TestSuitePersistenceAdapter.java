@@ -38,21 +38,25 @@ public class TestSuitePersistenceAdapter implements SaveTestSuitePort,
     // 테스트 스위트 수정 
     @Override
     public void updateTestSuite(TestSuite testSuite) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateTestSuite'");
+        TestSuiteJpaEntity entity = testSuiteMapper.toJpaEntity(testSuite);
+        testSuiteJpaRepository.save(entity);
     }
-
-
     // 테스트 스위트 이름 중복 검사
     @Override
     public boolean isTestSuiteNameDuplicated(String projectId, String name) {
         return testSuiteJpaRepository.existsByProjectIdAndNameAndArchivedAtIsNull(projectId, name);
+    }
+    // 
+    @Override
+    public boolean isTestSuiteNameDuplicatedExceptId(String projectId, String name, String excludeSuiteId) {
+        return testSuiteJpaRepository.existsByProjectIdAndNameAndIdNotAndArchivedAtIsNull(projectId, name, excludeSuiteId);
     }
     // 프로젝트 존재 여부 검사
     @Override
     public boolean existsById(String projectId) {
        return projectJpaRepository.existsByArchivedAtIsNullAndId(projectId);
     }
+    // 식별자를 통해 테스트 스위트 도메인을 로드
     @Override
     public Optional<TestSuite> loadById(TestSuiteId testSuiteId) {
         return testSuiteJpaRepository.findById(testSuiteId.getId())
