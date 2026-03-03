@@ -8,45 +8,41 @@
 아래 구조는 **Hexagonal Architecture(핵사고날 아키텍처)** 원칙을 따르며, 도메인 로직과 인프라가 명확히 분리되도록 설계되었습니다.
 
 ```shell
-src/main/java/com/dataarts/webmvpback
- ├── project
- │   │
- │   ├─ application                  // 유즈케이스 계층 (비즈니스 흐름 담당)
- │   │   ├─ port
- │   │   │   ├─ in                  // 입력 포트: 유즈케이스 정의 (Controller -> Service)
- │   │   │   │   ├─ CreateProjectUseCase      // 프로젝트 생성 기능 인터페이스 (입력 포트) 
- │   │   │   │   └─ CreateProjectCommand      // 유즈케이스 실행에 필요한 입력값 DTO
- │   │   │   └─ out                 // 출력 포트: 인프라 호출 인터페이스 (Service -> Adapter)
- │   │   │       ├─ SaveProjectPort          // 프로젝트 저장 요청 인터페이스
- │   │   │       └─ CheckProjectNamePort     // 프로젝트 이름 중복 확인 인터페이스
- │   │   │
- │   │   ├─ service                 // 유즈케이스 구현체 (비즈니스 로직 핵심)
- │   │   │   └─ ProjectCreateService        // CreateProjectUseCase 구현, 검증/도메인 생성/저장 처리
- │   │   │
- │   │   └─ validator               // 유즈케이스 입력 및 규칙 검증
- │   │       └─ ProjectCreateValidator       // 프로젝트 생성 관련 검증 로직
- │   │
- │   ├─ domain                      // 순수 도메인 계층 (비즈니스 규칙)
- │   │   ├─ Project                 // Aggregate Root: 핵심 엔티티, 비즈니스 상태, 행위 보유
- │   │   └─ ProjectId               // VO: UUID 기반 프로젝트 식별자
- │   │
- │   └─ adapter                     // 외부 시스템과 연결
- │       └─ out
- │           └─ persistence         // 데이터베이스 어댑터
- │               ├─ jpa
- │               │   ├─ ProjectJpaEntity      // JPA 엔티티 - DB 테이블 매핑
- │               │   └─ ProjectJpaRepository  // Spring Data JPA 인터페이스
- │               │
- │               ├─ ProjectPersistenceAdapter // SaveProjectPort 구현체 (DB 저장 실행)
- │               │
- │               └─ mapper
- │                   └─ ProjectMapper         // Domain <-> JPA Entitiy 변환 전담
- │
- ├── testcase
- ├── testsuite 
- ├── milestone
- └── shared
+src/main/java/com/data_arts_studio/web_mvp_back
+├── project
+│   ├── application
+│   │   ├── port
+│   │   │   ├── in          // UseCase, Command
+│   │   │   └── out         // Port 인터페이스
+│   │   ├── service         // UseCase 구현
+│   │   ├── validator       // 입력/비즈니스 검증
+│   │   └── exception       // ErrorCode, BusinessException
+│   ├── domain              // 도메인 모델/ID/행위
+│   └── adapter
+│       ├── in
+│       │   └── web
+│       │       ├── request   // 요청 DTO
+│       │       └── response  // 응답 DTO
+│       └── out
+│           └── persistence
+│               ├── jpa        // JpaEntity, JpaRepository
+│               ├── mapper     // Domain <-> Entity 매핑
+│               └── *PersistenceAdapter // out port 구현체
+├── test_case
+├── test_suite
+├── milestone
+├── test_run
+└── shared
+    ├── BaseEntity.java                 // 공통 감사 필드(createdAt, updatedAt, archivedAt) + 상태 변경 유틸
+    ├── LifecycleStatus.java            // 공통 생명주기 상태(ACTIVE, ARCHIVED, DELETED)
+    └── exception
+        ├── BaseException.java          // 도메인/애플리케이션 공통 비즈니스 예외 부모
+        ├── ErrorCode.java              // 에러코드 공통 인터페이스(코드, 메시지, HttpStatus)
+        ├── ErrorResponse.java          // API 에러 응답 포맷
+        └── GlobalExceptionHandler.java // 전역 예외 처리(@RestControllerAdvice)
  ```
+
+> 각 aggregate(`project`, `test_case`, `test_suite`, `milestone`, `test_run`)는 동일한 내부 구조(`application` / `domain` / `adapter`)를 따릅니다.
 
 <br>
 
@@ -70,6 +66,5 @@ src/main/java/com/dataarts/webmvpback
 * 제가 생각하는 이 기능의 추가를 핵사고날 아키텍처는 도메인을 건드리지 않고 포트와 어댑터 추가만으로 확장하는데 유연함을 제공합니다. 
 
 ### 3. 도메인 중심 설계로 안정성 확보
-* 이 프로젝트의 핵심은 테스트 케이스(TC)의 도메인 규칙과 흐름을 정확하게 표현하는 것으로 생각됩니다. 
-* 핵사고날 구조는 프로젝트의 중심을 아키텍처가 아니라 도메인 모델에 두기 때문에
-프로젝트가 커져도 도메인 규칙이 흐트러지는 일을 방지해줍니다. 
+* 이 프로젝트의 핵심은 테스트 케이스(TC)의 도메인 규칙과 흐름을 정확하게 표현하는 것이라고 생각합니다. 
+* 핵사고날 구조는 프로젝트의 중심을 아키텍처가 아니라 도메인 모델에 두기 때문에 프로젝트가 커져도 도메인 규칙이 흐트러지는 일을 방지해줍니다. 
