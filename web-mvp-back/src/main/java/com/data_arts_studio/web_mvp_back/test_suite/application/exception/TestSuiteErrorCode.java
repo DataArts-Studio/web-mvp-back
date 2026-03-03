@@ -18,6 +18,10 @@ public enum TestSuiteErrorCode implements ErrorCode{
     // 테스트 스위트에 대한 프로젝트를 찾을 수 없는 예외
     PROJECT_NOT_FOUND("TS404001", "해당 프로젝트를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    // 테스트 스위트 수정 시에 스위트 ID를 찾을 수 없을 때에 예외
+    TEST_SUITE_ID_NOT_FOUND("TS40099", "수정할려는 테스트 스위트 ID를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+
     // 테스트 스위트 중복 예외 
     TEST_SUITE_NAME_DUPLICATED("TS409001", "이미 존재하는 테스트 스위트 이름입니다.", HttpStatus.CONFLICT),
 
