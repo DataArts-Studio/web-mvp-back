@@ -2,9 +2,10 @@ package com.data_arts_studio.web_mvp_back.test_suite.application.validator;
 
 
 import org.springframework.stereotype.Component;
-import com.data_arts_studio.web_mvp_back.test_suite.application.port.in.UpdateTestSuiteCommand;
+
 import com.data_arts_studio.web_mvp_back.test_suite.application.exception.TestSuiteBusinessException;
 import com.data_arts_studio.web_mvp_back.test_suite.application.exception.TestSuiteErrorCode;
+import com.data_arts_studio.web_mvp_back.test_suite.application.port.in.command.UpdateTestSuiteCommand;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.CheckProjectExistsPort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.CheckTestSuiteNamePort;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class TestSuiteUpdateValidator {
         // 이름 형식 검증
         validateNameFormat(command.name());
         // 이름 중복 검증
-        validateNameDuplication(command.projectId(), command.name());
+        validateNameDuplication(command.projectId(), command.name(), command.id());
     }
     
     // 프로젝트 존재 여부 검증
@@ -57,9 +58,9 @@ public class TestSuiteUpdateValidator {
 
     }
 
-    private void validateNameDuplication(String projectId, String name) {
+    private void validateNameDuplication(String projectId, String name, String suiteId) {
         // 같은 프로젝트 내에 이름 중복 검증
-        if (checkTestSuiteNamePort.isTestSuiteNameDuplicated(projectId, name)) {
+        if (checkTestSuiteNamePort.isTestSuiteNameDuplicatedExceptId(projectId, name, suiteId)) {
             throw new TestSuiteBusinessException(TestSuiteErrorCode.TEST_SUITE_NAME_DUPLICATED);
         }
 
