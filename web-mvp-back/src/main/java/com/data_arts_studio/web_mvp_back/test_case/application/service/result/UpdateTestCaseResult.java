@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.test_case.application.service;
+package com.data_arts_studio.web_mvp_back.test_case.application.service.result;
 
 import java.time.OffsetDateTime;
 import java.util.List;

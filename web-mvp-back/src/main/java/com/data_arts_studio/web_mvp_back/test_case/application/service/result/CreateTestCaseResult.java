@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.test_case.application.service;
+package com.data_arts_studio.web_mvp_back.test_case.application.service.result;
 
 import java.util.List;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;

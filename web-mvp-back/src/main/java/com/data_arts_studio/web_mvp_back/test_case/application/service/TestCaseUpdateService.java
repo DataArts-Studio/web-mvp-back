@@ -3,10 +3,11 @@ package com.data_arts_studio.web_mvp_back.test_case.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseCommand;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseUseCase;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.UpdateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.UpdateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
+import com.data_arts_studio.web_mvp_back.test_case.application.service.result.UpdateTestCaseResult;
 import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseBusinessException;
 import com.data_arts_studio.web_mvp_back.test_case.application.exception.TestCaseErrorCode;
 import com.data_arts_studio.web_mvp_back.test_case.application.validator.UpdateTestCaseValidator;

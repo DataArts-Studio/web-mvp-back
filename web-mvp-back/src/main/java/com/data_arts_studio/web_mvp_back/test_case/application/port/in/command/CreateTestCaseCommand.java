@@ -1,11 +1,11 @@
-package com.data_arts_studio.web_mvp_back.test_case.application.port.in;
+package com.data_arts_studio.web_mvp_back.test_case.application.port.in.command;
 
 import java.util.List;
 import lombok.Builder;
 
 /**
- * 테스트 케이스 수정 커맨드
- * @param testCaseId     테스트 케이스 ID
+ * 테스트 케이스 생성 커맨드
+ * @param projectId     프로젝트 ID
  * @param testSuiteId   테스트 스위트 ID
  * @param name          테스트 케이스 이름
  * @param testType      테스트 케이스 유형
@@ -15,8 +15,8 @@ import lombok.Builder;
  * @param expectedResult 테스트 케이스 예상 결과
  */
 @Builder
-public record UpdateTestCaseCommand(
-    String testCaseId,
+public record CreateTestCaseCommand(
+    String projectId,
     String testSuiteId,
     String name,
     String testType,
@@ -24,4 +24,5 @@ public record UpdateTestCaseCommand(
     String preCondition,
     String steps,
     String expectedResult
-) {} 
+) {
+}

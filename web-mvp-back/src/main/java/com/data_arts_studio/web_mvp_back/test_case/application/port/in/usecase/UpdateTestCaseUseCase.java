@@ -1,0 +1,9 @@
+package com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase;
+
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.UpdateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.service.result.UpdateTestCaseResult;
+
+public interface UpdateTestCaseUseCase {
+    UpdateTestCaseResult updateTestCase(UpdateTestCaseCommand command);
+    
+}

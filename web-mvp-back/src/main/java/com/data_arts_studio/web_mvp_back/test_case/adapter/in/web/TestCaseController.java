@@ -11,13 +11,14 @@ import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.Creat
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseDetailRespose;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseListItemResponse;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.UpdateTestCaseResponse;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseCommand;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.CreateTestCaseUseCase;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.GetTestCaseUseCase;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseCommand;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.in.UpdateTestCaseUseCase;
-import com.data_arts_studio.web_mvp_back.test_case.application.service.CreateTestCaseResult;
-import com.data_arts_studio.web_mvp_back.test_case.application.service.UpdateTestCaseResult;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.CreateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.UpdateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.CreateTestCaseUseCase;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.GetTestCaseUseCase;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.UpdateTestCaseUseCase;
+import com.data_arts_studio.web_mvp_back.test_case.application.service.result.CreateTestCaseResult;
+import com.data_arts_studio.web_mvp_back.test_case.application.service.result.GetTestCaseDetailResult;
+import com.data_arts_studio.web_mvp_back.test_case.application.service.result.UpdateTestCaseResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,14 +75,36 @@ public class TestCaseController {
     // 테스트 케이스 목록 조회 (프로젝트 단위)
     @GetMapping
     public ResponseEntity<List<TestCaseListItemResponse>> getProjectTestCases(@PathVariable("projectId") String projectId) {
-        List<TestCaseListItemResponse> response = getTestCaseUseCase.getProjectTestCases(projectId);
+        List<TestCaseListItemResponse> response = getTestCaseUseCase.getProjectTestCases(projectId).stream()
+                .map(result -> new TestCaseListItemResponse(
+                        result.id(),
+                        result.projectId(),
+                        result.name(),
+                        result.latestModifiedAt()))
+                .toList();
         return ResponseEntity.ok(response);
     }
 
     // 테스트 케이스 단일 상세 조회
     @GetMapping("/{testCaseId}")
     public ResponseEntity<TestCaseDetailRespose> getTestCase(@PathVariable("projectId") String projectId, @PathVariable("testCaseId") String testCaseId) {
-        TestCaseDetailRespose response = getTestCaseUseCase.getTestCaseDetails(projectId, testCaseId);
+        GetTestCaseDetailResult result = getTestCaseUseCase.getTestCaseDetails(projectId, testCaseId);
+        TestCaseDetailRespose response = TestCaseDetailRespose.builder()
+                .id(result.id())
+                .projectId(result.projectId())
+                .caseKey(result.caseKey())
+                .resultStatus(result.resultStatus())
+                .name(result.name())
+                .testSuiteId(result.testSuiteId())
+                .testSuiteName(result.testSuiteName())
+                .testType(result.testType())
+                .createdAt(result.createdAt())
+                .updatedAt(result.updatedAt())
+                .tags(result.tags())
+                .preCondition(result.preCondition())
+                .steps(result.steps())
+                .expectedResult(result.expectedResult())
+                .build();
         return ResponseEntity.ok(response);
     }
     

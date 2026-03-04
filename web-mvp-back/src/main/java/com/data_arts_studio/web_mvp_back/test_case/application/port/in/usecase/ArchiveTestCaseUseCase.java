@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.test_case.application.port.in;
+package com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase;
 
 public interface ArchiveTestCaseUseCase {
     /**
