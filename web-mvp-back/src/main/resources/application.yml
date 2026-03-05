@@ -12,4 +12,5 @@ spring:
       ddl-auto: create
     show-sql: true
 profiles:
+# 여기서 활성화할 프로필을 지정. (dev, prod, local 중 선택)
     active: local

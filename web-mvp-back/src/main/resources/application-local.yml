@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      # 로컬 H2 메모리 DB는 꺼질 때 어차피 날아감으로 create 쓰기
+      ddl-auto: create 
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

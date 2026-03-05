@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    # AWS RDS 엔드포인트 주소를 환경 변수로 주입 받음
+    url: ${AWS_DB_URL}
+    username: ${AWS_DB_USERNAME}
+    password: ${AWS_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    
+    # 운영 환경을 위한 HikariCP 커넥션 풀 튜닝 
+    hikari:
+      maximum-pool-size: 15 # 동시에 유지할 최대 DB 연결 수 (서버 사양에 맞춰 조절)
+      minimum-idle: 5       # 유휴 상태로 유지할 최소 연결 수
+      connection-timeout: 20000 # DB 연결 시도 시 최대 대기 시간 (20초)
+
+  jpa:
+    # 운영 DB의 테이블이 자동으로 날아가는 대참사를 막기 위해 반드시 validate 또는 none으로 설정
+    hibernate:
+      ddl-auto: validate 
+    
+    # AWS RDS PostgreSQL에 맞는 방언 설정 (버전에 따라 조절 가능)
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    
+    # 운영 환경에서는 로그가 너무 많이 쌓이면 성능이 저하되므로, 
+    # 실제 나가는 쿼리만 간단히 보고 포매팅(format_sql)은 끄기
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+# 운영 환경 전용 로깅 설정 (에러 위주로만 남김)
+logging:
+  level:
+    root: INFO
+    # com.data_arts_studio... 등 본인의 패키지 경로에 맞게 수정
+    com.yourpackage: INFO 
+    org.hibernate.SQL: WARN
