@@ -1,18 +1,18 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.in.web;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.request.CreateTestCaseRequest;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.request.UpdateTestCaseRequest;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.CreateTestCaseResponse;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseDetailRespose;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.TestCaseListItemResponse;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.in.web.response.UpdateTestCaseResponse;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.ArchiveTestCaseCommand;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.CreateTestCaseCommand;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.UpdateTestCaseCommand;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.ArchiveTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.CreateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.GetTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.UpdateTestCaseUseCase;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 
 
@@ -38,6 +39,7 @@ public class TestCaseController {
     private final CreateTestCaseUseCase createTestCaseUseCase;
     private final UpdateTestCaseUseCase updateTestCaseUseCase;
     private final GetTestCaseUseCase getTestCaseUseCase;
+    private final ArchiveTestCaseUseCase archiveTestCaseUseCase;
 
     @PostMapping
     public ResponseEntity<CreateTestCaseResponse> createTestCase(@PathVariable("projectId") String projectId, @RequestBody CreateTestCaseRequest request) {
@@ -147,6 +149,13 @@ public class TestCaseController {
                         
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    // 프로젝트 아카이브
+    @PatchMapping("/{testCaseId}/archive")
+    public ResponseEntity<Void> archiveTestCase(@PathVariable String projectId, @PathVariable String testCaseId) {
+        archiveTestCaseUseCase.archiveTestCase(new ArchiveTestCaseCommand(projectId, testCaseId));
+        // 처리 성공시 200 OK (추 후 변경)
+        return ResponseEntity.ok().build();
     }
 
       // Id 정규화 (빈 값일 경우 null로 변환 - 최상위 루트(Project) 밑으로 이동)
