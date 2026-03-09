@@ -1,7 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,13 +19,13 @@ import lombok.NoArgsConstructor;
 public class TestCaseRunJpaEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private String id;
 
     @Column(name = "test_run_id", nullable = false)
-    private UUID testRunId;
+    private String testRunId;
 
     @Column(name = "test_case_id", nullable = false)
-    private UUID testCaseId;
+    private String testCaseId;
 
     @Column(name = "status", nullable = false)
     private String status;
@@ -41,7 +40,7 @@ public class TestCaseRunJpaEntity {
     private String sourceType;
 
     @Column(name = "source_id")
-    private UUID sourceId;
+    private String sourceId;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
