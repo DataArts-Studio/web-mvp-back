@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TestRunSuiteJpaId implements Serializable {
     @Column(name = "test_run_id", nullable = false)
-    private String testRunId;
+    private UUID testRunId;
 
     @Column(name = "test_suite_id", nullable = false)
-    private String testSuiteId;
+    private UUID testSuiteId;
 }
