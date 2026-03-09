@@ -2,6 +2,7 @@ package com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -36,9 +37,9 @@ public class TestSuiteQueryAdapter implements TestSuiteQueryPort {
      */
     @Override
     public Optional<GetTestSuiteDetailResult> findDetail(String projectId, String suiteId) {
-        return testSuiteJpaRepository.findByIdAndProjectId(suiteId, projectId)
+        return testSuiteJpaRepository.findByIdAndProjectId(UUID.fromString(suiteId), UUID.fromString(projectId))
             .map(e -> GetTestSuiteDetailResult.builder()
-                .suiteId(e.getId())
+                .suiteId(e.getId().toString())
                 .name(e.getName())
                 .description(e.getDescription() == null ? "" : e.getDescription())
                 .createdAt(e.getCreatedAt())
@@ -60,9 +61,9 @@ public class TestSuiteQueryAdapter implements TestSuiteQueryPort {
      */
     @Override
     public List<GetProjectTestSuiteItemResult> findAllByProject(String projectId) {
-        return testSuiteJpaRepository.findAllByProjectIdOrderBySortOrderAsc(projectId).stream()
+        return testSuiteJpaRepository.findAllByProjectIdOrderBySortOrderAsc(UUID.fromString(projectId)).stream()
             .map(e -> GetProjectTestSuiteItemResult.builder()
-                .suiteId(e.getId())
+                .suiteId(e.getId().toString())
                 .name(e.getName())
                 .type("기본") // MVP: 고정 or 엔티티 필드 있으면 연결
                 .testCaseCount(0)

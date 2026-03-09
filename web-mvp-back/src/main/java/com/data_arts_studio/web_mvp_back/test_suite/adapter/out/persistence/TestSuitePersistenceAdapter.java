@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -44,22 +45,23 @@ public class TestSuitePersistenceAdapter implements SaveTestSuitePort,
     // 테스트 스위트 이름 중복 검사
     @Override
     public boolean isTestSuiteNameDuplicated(String projectId, String name) {
-        return testSuiteJpaRepository.existsByProjectIdAndNameAndArchivedAtIsNull(projectId, name);
+        return testSuiteJpaRepository.existsByProjectIdAndNameAndArchivedAtIsNull(UUID.fromString(projectId), name);
     }
     // 
     @Override
     public boolean isTestSuiteNameDuplicatedExceptId(String projectId, String name, String excludeSuiteId) {
-        return testSuiteJpaRepository.existsByProjectIdAndNameAndIdNotAndArchivedAtIsNull(projectId, name, excludeSuiteId);
+        return testSuiteJpaRepository.existsByProjectIdAndNameAndIdNotAndArchivedAtIsNull(
+                UUID.fromString(projectId), name, UUID.fromString(excludeSuiteId));
     }
     // 프로젝트 존재 여부 검사
     @Override
     public boolean existsById(String projectId) {
-       return projectJpaRepository.existsByArchivedAtIsNullAndId(projectId);
+       return projectJpaRepository.existsByArchivedAtIsNullAndId(UUID.fromString(projectId));
     }
     // 식별자를 통해 테스트 스위트 도메인을 로드
     @Override
     public Optional<TestSuite> loadById(TestSuiteId testSuiteId) {
-        return testSuiteJpaRepository.findById(testSuiteId.getId())
+        return testSuiteJpaRepository.findById(UUID.fromString(testSuiteId.getId()))
                 .map(testSuiteMapper::toDomain);
     }
 

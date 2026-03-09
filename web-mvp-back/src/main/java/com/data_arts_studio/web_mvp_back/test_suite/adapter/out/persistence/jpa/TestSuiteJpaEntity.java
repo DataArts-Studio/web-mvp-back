@@ -2,6 +2,7 @@ package com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa
 
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 
@@ -27,10 +28,10 @@ public class TestSuiteJpaEntity {
 
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private UUID id;
 
     @Column(name = "project_id", nullable = false)
-    private String projectId;
+    private UUID projectId;
 
     @Column(name = "name", nullable = false)
     private String name;

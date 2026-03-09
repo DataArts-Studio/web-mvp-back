@@ -1,5 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.mapper;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
@@ -13,8 +15,8 @@ public class TestSuiteMapper {
     // Domain Entity -> JPA Entity
     public TestSuiteJpaEntity toJpaEntity(TestSuite testSuite) {
         return TestSuiteJpaEntity.builder()
-                .id(testSuite.getId().getId())
-                .projectId(testSuite.getProjectId().getId())
+                .id(UUID.fromString(testSuite.getId().getId()))
+                .projectId(UUID.fromString(testSuite.getProjectId().getId()))
                 .name(testSuite.getName())
                 .description(testSuite.getDescription())
                 .sortOrder(testSuite.getSortOrder())
@@ -28,8 +30,8 @@ public class TestSuiteMapper {
     // JPA Entity -> Domain Entity
     public TestSuite toDomain(TestSuiteJpaEntity entity) {
         return new TestSuite(
-            new TestSuiteId(entity.getId()),
-            new ProjectId(entity.getProjectId()),
+            new TestSuiteId(entity.getId().toString()),
+            new ProjectId(entity.getProjectId().toString()),
             entity.getName(),
             entity.getDescription(),
             entity.getSortOrder(),
