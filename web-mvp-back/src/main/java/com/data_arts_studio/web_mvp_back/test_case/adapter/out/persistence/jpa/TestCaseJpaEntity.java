@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
@@ -26,13 +27,13 @@ import org.hibernate.type.SqlTypes;
 public class TestCaseJpaEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private UUID id;
 
     @Column(name = "project_id", nullable = false)
-    private String projectId;
+    private UUID projectId;
 
     @Column(name = "test_suite_id", nullable = true)
-    private String testSuiteId;
+    private UUID testSuiteId;
 
     @Column(name = "case_key", nullable = false)
     private String caseKey;

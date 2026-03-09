@@ -1,20 +1,16 @@
 package com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.springframework.stereotype.Component;
-
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaRepository;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.mapper.TestCaseMapper;
+import com.data_arts_studio.web_mvp_back.test_case.application.port.out.ArchiveTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.GenerateCaseKeyPort;
-import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCase;
-import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -22,7 +18,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class TestCasePersistenceAdapter implements SaveTestCasePort, LoadTestCasePort, GenerateCaseKeyPort {
+public class TestCasePersistenceAdapter implements SaveTestCasePort, GenerateCaseKeyPort, ArchiveTestCasePort {
     private final TestCaseJpaRepository testCaseJpaRepository;
     private final TestCaseMapper testCaseMapper;
     private static final Pattern CASE_KEY_PATTERN = Pattern.compile("^TC-(\\d+)$");
@@ -35,7 +31,7 @@ public class TestCasePersistenceAdapter implements SaveTestCasePort, LoadTestCas
      */
     @Override
     public String generateUniqueCaseKey(String projectId) {
-        int maxSequence = testCaseJpaRepository.findAllByProjectId(projectId).stream()
+        int maxSequence = testCaseJpaRepository.findAllByProjectId(UUID.fromString(projectId)).stream()
                 .map(TestCaseJpaEntity::getCaseKey)
                 .mapToInt(this::extractSequence)
                 .max()
@@ -63,27 +59,6 @@ public class TestCasePersistenceAdapter implements SaveTestCasePort, LoadTestCas
         TestCaseJpaEntity entity = testCaseMapper.toJpaEntity(testCase);
         testCaseJpaRepository.save(entity);
     }
-    /**
-     * 식별자를 통해 테스트 케이스 도메인 엔티티를 로드
-     * @param testCaseId 도메인 값 객체 식별자
-     * @return 검색된 테스트 케이스 (없을 경우 Optional.empty())
-     */
-    @Override
-    public Optional<TestCase> loadTestCase(TestCaseId testCaseId) {
-       return testCaseJpaRepository.findById(testCaseId.getId())
-                .map(testCaseMapper::toDomainEntity);
-    }
-    /**
-     * 프로젝트에 속한 테스트 케이스 목록 로드
-     * @param projectId 프로젝트 식별자
-     * @return 테스트 케이스 목록
-     */
-    @Override
-    public List<TestCase> loadByProjectId(String projectId) {
-        return testCaseJpaRepository.findAllByProjectIdOrderBySortOrderAscCreatedAtAsc(projectId).stream()
-                .map(testCaseMapper::toDomainEntity)
-                .toList();
-    }
 
     /**
      * caseKey에서 시퀀스 번호 추출
@@ -99,6 +74,16 @@ public class TestCasePersistenceAdapter implements SaveTestCasePort, LoadTestCas
             return 0;
         }
         return Integer.parseInt(matcher.group(1));
+    }
+
+    /**
+     * 테스트 케이스 아카이브
+     * 
+     * @param 아카이될 테스트 케이스 도메인 객체
+     */
+    @Override
+    public void archive(TestCase testCase) {
+        testCaseJpaRepository.save(testCaseMapper.toJpaEntity(testCase));
     }
 
 }

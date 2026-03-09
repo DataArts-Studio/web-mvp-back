@@ -2,6 +2,7 @@ package com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.mapp
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,10 @@ public class TestCaseMapper {
     // Domain -> JPA Entity
     public TestCaseJpaEntity toJpaEntity(TestCase testCase) {
         return TestCaseJpaEntity.builder()
-                .id(testCase.getId().getId())
-                .projectId(testCase.getProjectId().getId())
+                .id(UUID.fromString(testCase.getId().getId()))
+                .projectId(UUID.fromString(testCase.getProjectId().getId()))
                 // testSuiteId가 null일 수 있으므로 조건부 처리
-                .testSuiteId(testCase.getTestSuiteId() != null ? testCase.getTestSuiteId().getId() : null)
+                .testSuiteId(testCase.getTestSuiteId() != null ? UUID.fromString(testCase.getTestSuiteId().getId()) : null)
                 .caseKey(testCase.getCaseKey())
                 .name(testCase.getName())
                 .testType(testCase.getTestType())
@@ -39,10 +40,10 @@ public class TestCaseMapper {
     // JPA Entity -> Domain
     public TestCase toDomainEntity(TestCaseJpaEntity entity) {
         return new TestCase(
-                new TestCaseId(entity.getId()),
-                new ProjectId(entity.getProjectId()),
+                new TestCaseId(entity.getId().toString()),
+                new ProjectId(entity.getProjectId().toString()),
                 // testSuiteId가 null일 수 있으므로 조건부 처리
-                entity.getTestSuiteId() != null ? new TestSuiteId(entity.getTestSuiteId()) : null,
+                entity.getTestSuiteId() != null ? new TestSuiteId(entity.getTestSuiteId().toString()) : null,
                 entity.getCaseKey(),
                 entity.getName(),
                 entity.getTestType(),
