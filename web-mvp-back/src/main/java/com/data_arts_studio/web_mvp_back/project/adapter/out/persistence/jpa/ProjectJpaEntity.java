@@ -1,9 +1,14 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
+
+import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class ProjectJpaEntity {
 
     @Id
-    private String id; 
+    private UUID id; 
 
     @Column(nullable = false, unique = true, length = 50)
     private String name;
@@ -43,4 +48,8 @@ public class ProjectJpaEntity {
 
     @Column(name = "archived_at")
     private OffsetDateTime archivedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lifecycle_status", nullable = false)
+    private LifecycleStatus lifecycleStatus;
 }

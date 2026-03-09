@@ -1,5 +1,6 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence;
 
+import java.util.UUID;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +34,7 @@ public class ProjectPersistenceAdapter implements LoadProjectPort,
     // LoadProjectPort 구현
     @Override
     public Optional<Project> loadById(ProjectId projectId) {
-        return projectJpaRepository.findById(projectId.getId())
+        return projectJpaRepository.findById(UUID.fromString(projectId.getId()))
                 .map(projectMapper::toDomain);
     }
     /**
