@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 
@@ -23,10 +24,10 @@ import lombok.NoArgsConstructor;
 public class TestRunJpaEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private UUID id;
 
     @Column(name = "project_id", nullable = false)
-    private String projectId;
+    private UUID projectId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -38,7 +39,7 @@ public class TestRunJpaEntity {
     private String status;
 
     @Column(name = "milestone_id")
-    private String milestoneId;
+    private UUID milestoneId;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
