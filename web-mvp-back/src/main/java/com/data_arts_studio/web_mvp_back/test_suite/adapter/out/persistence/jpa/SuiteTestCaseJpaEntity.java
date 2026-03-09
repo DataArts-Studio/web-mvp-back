@@ -1,5 +1,7 @@
 package com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,11 +19,11 @@ import lombok.NoArgsConstructor;
 public class SuiteTestCaseJpaEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private UUID id;
 
     @Column(name = "suite_id", nullable = false)
-    private String suiteId;
+    private UUID suiteId;
 
     @Column(name = "test_case_id", nullable = false)
-    private String testCaseId;
+    private UUID testCaseId;
 }
