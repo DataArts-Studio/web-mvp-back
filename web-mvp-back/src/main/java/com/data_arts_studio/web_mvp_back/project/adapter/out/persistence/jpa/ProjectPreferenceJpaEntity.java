@@ -1,6 +1,7 @@
 package com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,10 +19,10 @@ import lombok.NoArgsConstructor;
 public class ProjectPreferenceJpaEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    private UUID id;
 
     @Column(name = "project_id", nullable = false)
-    private String projectId;
+    private UUID projectId;
 
     @Column(name = "key", nullable = false)
     private String key;
@@ -30,8 +31,8 @@ public class ProjectPreferenceJpaEntity {
     private String value;
 
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }
