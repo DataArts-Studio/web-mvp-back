@@ -25,28 +25,35 @@ public class CreateMilestoneService implements CreateMilestoneUseCase {
     private final CreateMilestoneValidator createMilestoneValidator;
     private final SaveMilestonePort saveMilestonePort;
 
-    @Override
+
     /**
      * 마일스톤 생성 처리
      *
      * @param command 생성 요청 정보
      * @return 마일스톤 생성 결과
      */
+    @Override
     public CreateMilestoneResult createMilestone(CreateMilestoneCommand command) {
         createMilestoneValidator.validate(command);
-        // 생성 시 기본 상태는 planned로 고정
+
+        MilestoneId milestoneId = MilestoneId.create();
+        ProjectId projectId = new ProjectId(command.projectId());
+
         Milestone milestone = new Milestone(
-                MilestoneId.create(),
-                new ProjectId(command.projectId()),
+                milestoneId,
+                projectId,
                 command.name().trim(),
                 command.description(),
                 command.startDate(),
                 command.endDate(),
-                MilestoneProgressStatus.PLANNED);
+                MilestoneProgressStatus.PLANNED
+        );
+
         saveMilestonePort.createMilestone(milestone);
+
         return CreateMilestoneResult.builder()
-                .id(milestone.getId().getId())
-                .projectId(milestone.getProjectId().getId())
+                .id(milestoneId.getId())
+                .projectId(projectId.getId())
                 .name(milestone.getName())
                 .description(milestone.getDescription())
                 .status(milestone.getStatus().getDbValue())
