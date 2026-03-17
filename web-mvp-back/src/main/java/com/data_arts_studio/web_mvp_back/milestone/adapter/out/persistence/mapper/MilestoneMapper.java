@@ -1,5 +1,6 @@
 package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.mapper;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -10,20 +11,28 @@ import org.springframework.stereotype.Component;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.MilestoneJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.domain.Milestone;
 import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
-import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneProgressStatus;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 
+/**
+ * 마일스톤 도메인과 JPA 엔티티 사이의 표현 차이를 정리하는 매퍼
+ */
 @Component
 public class MilestoneMapper {
 
-    // 도메인은 String 기반 식별자 VO를 쓰고, JPA는 DB uuid 컬럼에 맞춰 UUID를 쓴다.
+    /**
+     * 도메인 마일스톤을 JPA 엔티티로 변환
+     * 도메인 식별자 VO는 내부 String payload를 가지므로 UUID 컬럼 저장 전에 변환 필요
+     *
+     * @param milestone 도메인 마일스톤
+     * @return JPA 엔티티
+     */
     public MilestoneJpaEntity toJpaEntity(Milestone milestone) {
         return new MilestoneJpaEntity(
                 UUID.fromString(milestone.getId().getId()),
                 UUID.fromString(milestone.getProjectId().getId()),
                 milestone.getName(),
                 milestone.getDescription(),
-                milestone.getStatus().name(),
+                milestone.getStatus(),
                 toLocalDate(milestone.getStartDate()),
                 toLocalDate(milestone.getEndDate()),
                 milestone.getCreatedAt(),
@@ -32,7 +41,13 @@ public class MilestoneMapper {
                 milestone.getLifecycleStatus());
     }
 
-    // JPA 엔티티를 도메인으로 복원하면서 UUID/날짜 표현 차이를 다시 도메인 규칙에 맞춤
+    /**
+     * JPA 엔티티를 도메인 마일스톤으로 복원
+     * DB의 date 컬럼과 UUID 컬럼 표현을 도메인 타입으로 되돌리고 BaseEntity 상태도 함께 복원
+     *
+     * @param entity JPA 엔티티
+     * @return 도메인 마일스톤
+     */
     public Milestone toDomain(MilestoneJpaEntity entity) {
         Milestone milestone = new Milestone(
                 new MilestoneId(entity.getId().toString()),
@@ -41,28 +56,23 @@ public class MilestoneMapper {
                 entity.getDescription(),
                 toOffsetDateTime(entity.getStartDate()),
                 toOffsetDateTime(entity.getEndDate()),
-                MilestoneProgressStatus.valueOf(entity.getProgressStatus()));
+                entity.getProgressStatus());
         milestone.restoreAuditFields(entity.getCreatedAt(), entity.getUpdatedAt(), entity.getArchivedAt());
-        // BaseEntity 상태를 DB 값에 맞게 다시 맞춤
-        if (entity.getLifecycleStatus() != milestone.getLifecycleStatus()) {
-            if (entity.getArchivedAt() == null) {
-                milestone.restore();
-            } else {
-                milestone.markArchived();
-                milestone.restoreAuditFields(entity.getCreatedAt(), entity.getUpdatedAt(), entity.getArchivedAt());
-            }
+        if (entity.getArchivedAt() != null) {
+            // BaseEntity 기본 상태 대신 DB의 archived 상태 복원
+            milestone.archive();
+            milestone.restoreAuditFields(entity.getCreatedAt(), entity.getUpdatedAt(), entity.getArchivedAt());
         }
         return milestone;
     }
-// TODO: milestones.start_date/end_date를 timestamptz로 바꾸면 이 변환은 제거 가능
 
-    // DB는 date, 도메인은 OffsetDateTime을 사용하므로 저장 시 날짜만
-    private java.time.LocalDate toLocalDate(OffsetDateTime dateTime) {
+    // DB는 date 컬럼을 사용하므로 OffsetDateTime에서 날짜 부분만 저장
+    private LocalDate toLocalDate(OffsetDateTime dateTime) {
         return dateTime == null ? null : dateTime.toLocalDate();
     }
 
-    // DB의 date를 도메인으로 올릴 때는 시간 정보를 자정 UTC로 보정해 채움
-    private OffsetDateTime toOffsetDateTime(java.time.LocalDate date) {
+    // DB의 date를 도메인 OffsetDateTime으로 복원할 때는 자정 UTC를 기준 시각으로 채움
+    private OffsetDateTime toOffsetDateTime(LocalDate date) {
         return date == null ? null : date.atTime(LocalTime.MIDNIGHT).atOffset(ZoneOffset.UTC);
     }
 }
