@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.TestSuiteJpaRepository;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.repository.TestSuiteJpaRepository;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.TestSuiteQueryPort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.service.result.GetProjectTestSuiteItemResult;
 import com.data_arts_studio.web_mvp_back.test_suite.application.service.result.GetTestSuiteDetailResult;

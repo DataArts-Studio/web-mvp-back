@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.TestSuiteJpaEntity;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.entity.TestSuiteJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuite;
 import com.data_arts_studio.web_mvp_back.test_suite.domain.TestSuiteId;
 

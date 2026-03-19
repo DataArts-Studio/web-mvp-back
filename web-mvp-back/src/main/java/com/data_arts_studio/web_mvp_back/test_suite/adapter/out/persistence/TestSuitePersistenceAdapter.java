@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.adapter.out.persistence.jpa.ProjectJpaRepository;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.TestSuiteJpaEntity;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.TestSuiteJpaRepository;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.entity.TestSuiteJpaEntity;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.repository.TestSuiteJpaRepository;
 import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.mapper.TestSuiteMapper;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.CheckProjectExistsPort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.CheckTestSuiteNamePort;
@@ -25,6 +25,8 @@ public class TestSuitePersistenceAdapter implements SaveTestSuitePort,
                                                     CheckTestSuiteNamePort, 
                                                     CheckProjectExistsPort,
                                                     LoadTestSuitePort {
+
+    // TODO(authz): 프로젝트 경계 검증을 단순화하려면 findByIdAndProjectId 성격의 로드 메서드도 포트로 노출하는 방향을 검토할 것.
 
     private final TestSuiteJpaRepository testSuiteJpaRepository;
     private final TestSuiteMapper testSuiteMapper;

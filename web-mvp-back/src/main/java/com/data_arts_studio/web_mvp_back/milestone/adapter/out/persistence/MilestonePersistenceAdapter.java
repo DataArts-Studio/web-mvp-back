@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.MilestoneJpaEntity;
-import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.MilestoneJpaRepository;
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneJpaEntity;
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.repository.MilestoneJpaRepository;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.mapper.MilestoneMapper;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.CheckMilestoneNamePort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.CheckProjectExistsPort;
