@@ -10,17 +10,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.request.CreateMilestoneRequest;
+import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.request.CreateMilestoneTestRunRequest;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.request.UpdateMilestoneRequest;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.response.CreateMilestoneResponse;
-
+import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.response.CreateMilestoneTestRunResponse;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.in.web.response.UpdateMilestoneResponse;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.ArchiveMilestoneCommand;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.CreateMilestoneCommand;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.CreateMilestoneTestRunCommand;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.UpdateMilestoneCommand;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.ArchiveMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.AssignTestCaseToMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.AssignTestSuiteToMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.CreateMilestoneTestRunUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.CreateMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.QueryMilestoneTestCaseLinksUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.QueryMilestoneTestRunsUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.QueryMilestoneTestSuiteLinksUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.QueryMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.RemoveTestCaseFromMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.RemoveTestSuiteFromMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.ReplaceMilestoneTestCasesUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.UpdateMilestoneUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.service.result.CreateMilestoneResult;
+import com.data_arts_studio.web_mvp_back.milestone.application.service.result.CreateMilestoneTestRunResult;
 import com.data_arts_studio.web_mvp_back.milestone.application.service.result.UpdateMilestoneResult;
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +48,7 @@ public class MilestoneController {
     private final UpdateMilestoneUseCase updateMilestoneUseCase;
     private final ArchiveMilestoneUseCase archiveMilestoneUseCase;
 
+    private final CreateMilestoneTestRunUseCase createMilestoneTestRunUseCase;
 
     /**
      * 특정 프로젝트에 마일스톤을 생성
@@ -66,7 +80,7 @@ public class MilestoneController {
     }
 
     /**
-     * 마일스톤 기본 정보를 수정한다.
+     * 마일스톤 기본 정보를 수정
      *
      * @param milestoneId 마일스톤 식별자
      * @param request 수정 요청 DTO
@@ -96,7 +110,7 @@ public class MilestoneController {
     }
 
     /**
-     * 마일스톤을 아카이브한다.
+     * 마일스톤 아카이브
      *
      * @param milestoneId 마일스톤 식별자
      * @return no content 응답
@@ -107,4 +121,28 @@ public class MilestoneController {
         return ResponseEntity.noContent().build();
     }
 
+     /**
+     * 마일스톤 기반 테스트 실행을 생성
+     *
+     * @param request 테스트 실행 생성 요청 DTO
+     * @return 생성된 테스트 실행 응답
+     */
+    @PostMapping("/test-runs")
+    public ResponseEntity<CreateMilestoneTestRunResponse> createMilestoneTestRun(@RequestBody CreateMilestoneTestRunRequest request) {
+        CreateMilestoneTestRunResult result = createMilestoneTestRunUseCase.createMilestoneTestRun(
+                CreateMilestoneTestRunCommand.builder()
+                        .projectId(request.projectId())
+                        .milestoneId(request.milestoneId())
+                        .name(request.name())
+                        .description(request.description())
+                        .build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreateMilestoneTestRunResponse(
+                result.id(),
+                result.projectId(),
+                result.milestoneId(),
+                result.name(),
+                result.status()));
+    }
+
+   
 }
