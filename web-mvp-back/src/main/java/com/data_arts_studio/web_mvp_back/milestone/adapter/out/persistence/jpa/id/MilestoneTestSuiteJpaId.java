@@ -1,4 +1,4 @@
-package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa;
+package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.id;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class MilestoneTestCaseJpaId implements Serializable {
+public class MilestoneTestSuiteJpaId implements Serializable {
     @Column(name = "milestone_id", nullable = false)
     private UUID milestoneId;
 
-    @Column(name = "test_case_id", nullable = false)
-    private UUID testCaseId;
+    @Column(name = "test_suite_id", nullable = false)
+    private UUID testSuiteId;
 }

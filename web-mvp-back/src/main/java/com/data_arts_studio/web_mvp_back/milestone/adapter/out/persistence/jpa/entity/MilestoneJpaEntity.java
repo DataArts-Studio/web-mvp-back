@@ -1,12 +1,15 @@
-package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa;
+package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.converter.MilestoneProgressStatusConverter;
+import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneProgressStatus;
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,8 +39,9 @@ public class MilestoneJpaEntity {
     @Column(name = "description")
     private String description;
 
+    @Convert(converter = MilestoneProgressStatusConverter.class)
     @Column(name = "progress_status", nullable = false)
-    private String progressStatus;
+    private MilestoneProgressStatus progressStatus;
 
     @Column(name = "start_date")
     private LocalDate startDate;

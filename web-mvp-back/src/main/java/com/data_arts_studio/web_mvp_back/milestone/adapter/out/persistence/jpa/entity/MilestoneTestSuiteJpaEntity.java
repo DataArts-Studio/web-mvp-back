@@ -1,4 +1,6 @@
-package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa;
+package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity;
+
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.id.MilestoneTestSuiteJpaId;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,11 +11,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "milestone_test_cases")
+@Table(name = "milestone_test_suites")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class MilestoneTestCaseJpaEntity {
+public class MilestoneTestSuiteJpaEntity {
     @EmbeddedId
-    private MilestoneTestCaseJpaId id;
+    private MilestoneTestSuiteJpaId id;
 }
