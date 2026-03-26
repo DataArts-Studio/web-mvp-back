@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.MilestoneJpaEntity;
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.domain.Milestone;
 import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
