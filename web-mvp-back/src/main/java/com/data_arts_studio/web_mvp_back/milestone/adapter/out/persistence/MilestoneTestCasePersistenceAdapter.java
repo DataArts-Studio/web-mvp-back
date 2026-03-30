@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneTestCaseJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.id.MilestoneTestCaseJpaId;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.repository.MilestoneJpaRepository;
@@ -46,15 +47,15 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
     public void assign(String milestoneId, String testCaseId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
         UUID testCaseUuid = UUID.fromString(testCaseId);
-        UUID projectUuid = validateMilestoneExists(milestoneUuid);
-        validateTestCaseInProject(projectUuid, testCaseUuid);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
+        TestCaseJpaEntity testCase = loadTestCaseInProject(milestone.getProjectId(), testCaseUuid);
 
         MilestoneTestCaseJpaId id = new MilestoneTestCaseJpaId(milestoneUuid, testCaseUuid);
         if (milestoneTestCaseJpaRepository.existsById(id)) {
             // 같은 링크 재요청은 멱등하게 처리
             return;
         }
-        milestoneTestCaseJpaRepository.save(new MilestoneTestCaseJpaEntity(id));
+        milestoneTestCaseJpaRepository.save(new MilestoneTestCaseJpaEntity(milestone, testCase));
     }
 
     @Override
@@ -66,19 +67,18 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
      */
     public void replace(String milestoneId, List<String> testCaseIds) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
-        UUID projectUuid = validateMilestoneExists(milestoneUuid);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
         // LinkedHashSet으로 감싸서 중복 제거와 입력 순서 유지를 같이 처리
         Set<String> uniqueIds = new LinkedHashSet<>(testCaseIds == null ? List.of() : testCaseIds);
-        for (String testCaseId : uniqueIds) {
-            validateTestCaseInProject(projectUuid, UUID.fromString(testCaseId));
-        }
 
         // 전체 교체는 기존 링크를 지우고 최종 집합만 다시 저장
         milestoneTestCaseJpaRepository.deleteByIdMilestoneId(milestoneUuid);
         // 최종 식별자 목록을 링크 엔티티 목록으로 변환
         List<MilestoneTestCaseJpaEntity> entities = uniqueIds.stream()
-                .map(testCaseId -> new MilestoneTestCaseJpaEntity(
-                        new MilestoneTestCaseJpaId(milestoneUuid, UUID.fromString(testCaseId))))
+                .map(UUID::fromString)
+                .map(testCaseUuid -> new MilestoneTestCaseJpaEntity(
+                        milestone,
+                        loadTestCaseInProject(milestone.getProjectId(), testCaseUuid)))
                 .toList();
         milestoneTestCaseJpaRepository.saveAll(entities);
     }
@@ -93,8 +93,8 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
     public void remove(String milestoneId, String testCaseId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
         UUID testCaseUuid = UUID.fromString(testCaseId);
-        UUID projectUuid = validateMilestoneExists(milestoneUuid);
-        validateTestCaseInProject(projectUuid, testCaseUuid);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
+        loadTestCaseInProject(milestone.getProjectId(), testCaseUuid);
         milestoneTestCaseJpaRepository.deleteByIdMilestoneIdAndIdTestCaseId(milestoneUuid, testCaseUuid);
     }
 
@@ -107,7 +107,7 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
      */
     public List<String> loadTestCaseIdsByMilestone(String milestoneId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
-        validateMilestoneExists(milestoneUuid);
+        loadActiveMilestone(milestoneUuid);
         // EmbeddedId 내부의 testCaseId만 꺼내서 응용 계층이 바로 쓸 수 있는 문자열 목록으로 변환
         return milestoneTestCaseJpaRepository.findAllByIdMilestoneId(milestoneUuid).stream()
                 .map(link -> link.getId().getTestCaseId().toString())
@@ -120,10 +120,9 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
      * @param milestoneId 마일스톤 식별자
      * @return 마일스톤이 속한 프로젝트 식별자
      */
-    private UUID validateMilestoneExists(UUID milestoneId) {
+    private MilestoneJpaEntity loadActiveMilestone(UUID milestoneId) {
         return milestoneJpaRepository.findByIdAndArchivedAtIsNull(milestoneId)
-                .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND))
-                .getProjectId();
+                .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND));
     }
 
     /**
@@ -132,12 +131,13 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
      * @param projectId 프로젝트 식별자
      * @param testCaseId 테스트 케이스 식별자
      */
-    private void validateTestCaseInProject(UUID projectId, UUID testCaseId) {
+    private TestCaseJpaEntity loadTestCaseInProject(UUID projectId, UUID testCaseId) {
         TestCaseJpaEntity testCase = testCaseJpaRepository.findById(testCaseId)
                 .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.TEST_CASE_NOT_FOUND));
         if (!projectId.equals(testCase.getProjectId())) {
             // 같은 프로젝트 소속 케이스만 범위에 넣도록 보장
             throw new MilestoneBusinessException(MilestoneErrorCode.TEST_CASE_OUT_OF_PROJECT);
         }
+        return testCase;
     }
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.entity.MilestoneTestSuiteJpaEntity;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.id.MilestoneTestSuiteJpaId;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.repository.MilestoneJpaRepository;
@@ -43,15 +44,15 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
     public void assign(String milestoneId, String testSuiteId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
         UUID testSuiteUuid = UUID.fromString(testSuiteId);
-        UUID projectUuid = validateMilestoneExists(milestoneUuid);
-        validateTestSuiteInProject(projectUuid, testSuiteUuid);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
+        TestSuiteJpaEntity testSuite = loadTestSuiteInProject(milestone.getProjectId(), testSuiteUuid);
 
         MilestoneTestSuiteJpaId id = new MilestoneTestSuiteJpaId(milestoneUuid, testSuiteUuid);
         if (milestoneTestSuiteJpaRepository.existsById(id)) {
             // 같은 링크 재요청은 멱등하게 처리
             return;
         }
-        milestoneTestSuiteJpaRepository.save(new MilestoneTestSuiteJpaEntity(id));
+        milestoneTestSuiteJpaRepository.save(new MilestoneTestSuiteJpaEntity(milestone, testSuite));
     }
 
     @Override
@@ -64,8 +65,8 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
     public void remove(String milestoneId, String testSuiteId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
         UUID testSuiteUuid = UUID.fromString(testSuiteId);
-        UUID projectUuid = validateMilestoneExists(milestoneUuid);
-        validateTestSuiteInProject(projectUuid, testSuiteUuid);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
+        loadTestSuiteInProject(milestone.getProjectId(), testSuiteUuid);
         milestoneTestSuiteJpaRepository.deleteByIdMilestoneIdAndIdTestSuiteId(milestoneUuid, testSuiteUuid);
     }
 
@@ -78,7 +79,7 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
      */
     public List<String> loadTestSuiteIdsByMilestone(String milestoneId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
-        validateMilestoneExists(milestoneUuid);
+        loadActiveMilestone(milestoneUuid);
         // EmbeddedId 내부의 testSuiteId만 꺼내서 응용 계층에서 바로 사용할 수 있게 변환
         return milestoneTestSuiteJpaRepository.findAllByIdMilestoneId(milestoneUuid).stream()
                 .map(link -> link.getId().getTestSuiteId().toString())
@@ -91,10 +92,9 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
      * @param milestoneId 마일스톤 식별자
      * @return 마일스톤이 속한 프로젝트 식별자
      */
-    private UUID validateMilestoneExists(UUID milestoneId) {
+    private MilestoneJpaEntity loadActiveMilestone(UUID milestoneId) {
         return milestoneJpaRepository.findByIdAndArchivedAtIsNull(milestoneId)
-                .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND))
-                .getProjectId();
+                .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND));
     }
 
     /**
@@ -103,12 +103,13 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
      * @param projectId 프로젝트 식별자
      * @param testSuiteId 테스트 스위트 식별자
      */
-    private void validateTestSuiteInProject(UUID projectId, UUID testSuiteId) {
+    private TestSuiteJpaEntity loadTestSuiteInProject(UUID projectId, UUID testSuiteId) {
         TestSuiteJpaEntity testSuite = testSuiteJpaRepository.findById(testSuiteId)
                 .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.TEST_SUITE_NOT_FOUND));
         if (!projectId.equals(testSuite.getProjectId())) {
             // 같은 프로젝트 소속 스위트만 범위에 넣도록 보장
             throw new MilestoneBusinessException(MilestoneErrorCode.TEST_SUITE_OUT_OF_PROJECT);
         }
+        return testSuite;
     }
 }
