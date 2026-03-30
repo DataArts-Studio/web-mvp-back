@@ -45,7 +45,11 @@ public class MilestoneTestSuiteController {
     public ResponseEntity<GetMilestoneTestSuitesResponse> getMilestoneTestSuites(@PathVariable String milestoneId) {
         GetMilestoneTestSuitesResult result = queryMilestoneTestSuiteLinksUseCase.getMilestoneTestSuites(milestoneId);
         List<GetMilestoneTestSuiteItemResponse> items = result.items().stream()
-                .map(item -> new GetMilestoneTestSuiteItemResponse(item.id(), item.name()))
+                .map(item -> new GetMilestoneTestSuiteItemResponse(
+                        item.id(),
+                        item.name(),
+                        item.description(),
+                        item.linkedTestCaseCount()))
                 .toList();
         return ResponseEntity.ok(new GetMilestoneTestSuitesResponse(result.milestoneId(), items));
     }
