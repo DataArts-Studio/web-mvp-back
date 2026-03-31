@@ -38,6 +38,9 @@ public interface MilestoneTestSuiteJpaRepository extends JpaRepository<Milestone
             """)
     List<MilestoneTestSuiteItemProjection> findSuiteItemsByMilestoneId(UUID milestoneId);
 
+    // 특정 마일스톤에 연결된 테스트 스위트 매핑 전체 삭제
+    void deleteByIdMilestoneId(UUID milestoneId);
+
     
     // 특정 마일스톤과 테스트 스위트 간의 연결 매핑 하나를 삭제
     void deleteByIdMilestoneIdAndIdTestSuiteId(UUID milestoneId, UUID testSuiteId);

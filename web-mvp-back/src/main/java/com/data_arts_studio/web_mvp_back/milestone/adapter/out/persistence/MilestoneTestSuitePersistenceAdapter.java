@@ -1,6 +1,8 @@
 package com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import com.data_arts_studio.web_mvp_back.milestone.application.exception.Milesto
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.AssignTestSuiteToMilestonePort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.LoadMilestoneTestSuiteLinksPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.RemoveTestSuiteFromMilestonePort;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.out.ReplaceMilestoneTestSuitesPort;
 import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.entity.TestSuiteJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.repository.TestSuiteJpaRepository;
 
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMilestonePort,
+                                                             ReplaceMilestoneTestSuitesPort,
                                                              RemoveTestSuiteFromMilestonePort,
                                                              LoadMilestoneTestSuiteLinksPort {
 
@@ -53,6 +57,28 @@ public class MilestoneTestSuitePersistenceAdapter implements AssignTestSuiteToMi
             return;
         }
         milestoneTestSuiteJpaRepository.save(new MilestoneTestSuiteJpaEntity(milestone, testSuite));
+    }
+
+    @Override
+    /**
+     * 마일스톤에 연결된 테스트 스위트 집합 전체 교체
+     *
+     * @param milestoneId 마일스톤 식별자
+     * @param testSuiteIds 최종 테스트 스위트 식별자 목록
+     */
+    public void replace(String milestoneId, List<String> testSuiteIds) {
+        UUID milestoneUuid = UUID.fromString(milestoneId);
+        MilestoneJpaEntity milestone = loadActiveMilestone(milestoneUuid);
+        Set<String> uniqueIds = new LinkedHashSet<>(testSuiteIds == null ? List.of() : testSuiteIds);
+
+        milestoneTestSuiteJpaRepository.deleteByIdMilestoneId(milestoneUuid);
+        List<MilestoneTestSuiteJpaEntity> entities = uniqueIds.stream()
+                .map(UUID::fromString)
+                .map(testSuiteUuid -> new MilestoneTestSuiteJpaEntity(
+                        milestone,
+                        loadTestSuiteInProject(milestone.getProjectId(), testSuiteUuid)))
+                .toList();
+        milestoneTestSuiteJpaRepository.saveAll(entities);
     }
 
     @Override
