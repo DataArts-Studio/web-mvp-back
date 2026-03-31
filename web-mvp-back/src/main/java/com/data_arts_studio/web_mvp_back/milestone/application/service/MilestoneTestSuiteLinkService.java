@@ -7,13 +7,16 @@ import com.data_arts_studio.web_mvp_back.milestone.application.exception.Milesto
 import com.data_arts_studio.web_mvp_back.milestone.application.exception.MilestoneErrorCode;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.AssignTestSuiteToMilestoneCommand;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.RemoveTestSuiteFromMilestoneCommand;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.command.ReplaceMilestoneTestSuitesCommand;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.AssignTestSuiteToMilestoneUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.QueryMilestoneTestSuiteLinksUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.RemoveTestSuiteFromMilestoneUseCase;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.ReplaceMilestoneTestSuitesUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.AssignTestSuiteToMilestonePort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.LoadMilestonePort;
-import com.data_arts_studio.web_mvp_back.milestone.application.port.out.MilestoneQueryPort;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.out.MilestoneTestSuiteQueryPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.RemoveTestSuiteFromMilestonePort;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.out.ReplaceMilestoneTestSuitesPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.service.result.GetMilestoneTestSuitesResult;
 import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
 
@@ -26,14 +29,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class MilestoneTestSuiteLinkService implements AssignTestSuiteToMilestoneUseCase,
+                                                      ReplaceMilestoneTestSuitesUseCase,
                                                       RemoveTestSuiteFromMilestoneUseCase,
                                                       QueryMilestoneTestSuiteLinksUseCase {
 
                                                         
     private final AssignTestSuiteToMilestonePort assignTestSuiteToMilestonePort;
+    private final ReplaceMilestoneTestSuitesPort replaceMilestoneTestSuitesPort;
     private final RemoveTestSuiteFromMilestonePort removeTestSuiteFromMilestonePort;
     private final LoadMilestonePort loadMilestonePort;
-    private final MilestoneQueryPort milestoneQueryPort;
+    private final MilestoneTestSuiteQueryPort milestoneTestSuiteQueryPort;
 
     /**
      * 마일스톤에 테스트 스위트 한 건 연결
@@ -43,6 +48,16 @@ public class MilestoneTestSuiteLinkService implements AssignTestSuiteToMilestone
     @Override
     public void assignTestSuiteToMilestone(AssignTestSuiteToMilestoneCommand command) {
         assignTestSuiteToMilestonePort.assign(command.milestoneId(), command.testSuiteId());
+    }
+
+    /**
+     * 마일스톤 테스트 스위트 범위를 전달된 목록으로 전체 교체
+     *
+     * @param command 범위 교체 요청 정보
+     */
+    @Override
+    public void replaceMilestoneTestSuites(ReplaceMilestoneTestSuitesCommand command) {
+        replaceMilestoneTestSuitesPort.replace(command.milestoneId(), command.testSuiteIds());
     }
 
     /**
@@ -68,7 +83,7 @@ public class MilestoneTestSuiteLinkService implements AssignTestSuiteToMilestone
                 .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND));
         return GetMilestoneTestSuitesResult.builder()
                 .milestoneId(milestoneId)
-                .items(milestoneQueryPort.findTestSuites(milestoneId))
+                .items(milestoneTestSuiteQueryPort.findTestSuites(milestoneId))
                 .build();
     }
 }
