@@ -11,6 +11,7 @@ public enum TestRunErrorCode implements ErrorCode {
     TEST_RUN_INVALID("TR400001", "잘못된 테스트 런 요청입니다.", HttpStatus.BAD_REQUEST),
     TEST_RUN_NAME_EMPTY("TR400002", "테스트 실행 이름을 입력해주세요.", HttpStatus.BAD_REQUEST),
     TEST_RUN_MILESTONES_EMPTY("TR400009", "테스트 실행에 사용할 마일스톤을 선택해주세요.", HttpStatus.BAD_REQUEST),
+    TEST_RUN_MILESTONES_DUPLICATED("TR400010", "동일한 마일스톤을 중복 선택할 수 없습니다.", HttpStatus.BAD_REQUEST),
     TEST_RUN_NAME_DUPLICATED("TR409002", "이미 존재하는 실행 이름입니다.", HttpStatus.CONFLICT);
 
     private final String errorCode;
