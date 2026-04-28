@@ -9,7 +9,7 @@ import com.data_arts_studio.web_mvp_back.test_run.application.service.result.Cre
 public interface CreateTestRunUseCase {
 
     /**
-     * 단일 마일스톤 범위를 기준으로 테스트 런을 생성
+     * 하나 이상의 마일스톤 범위를 기준으로 테스트 런을 생성
      *
      * @param command 테스트 런 생성 요청 정보
      * @return 생성 결과
