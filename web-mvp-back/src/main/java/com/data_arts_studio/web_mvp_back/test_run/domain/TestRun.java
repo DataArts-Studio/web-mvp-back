@@ -1,7 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_run.domain;
 
 import java.time.OffsetDateTime;
-import com.data_arts_studio.web_mvp_back.milestone.domain.MilestoneId;
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
 import com.data_arts_studio.web_mvp_back.shared.BaseEntity;
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
@@ -9,7 +8,7 @@ import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
 /**
  * 테스트 런 도메인 모델
  *
- * 마일스톤에 속한 테스트 실행 단위를 나타내는 집계 루트.
+ * 프로젝트에 속한 테스트 실행 단위를 나타내는 집계 루트.
  * 이름·설명·진행 상태·공유 정보를 보유하며, 상태 변경과 공유 갱신 등의
  * 도메인 행위를 캡슐화
  */
@@ -19,9 +18,6 @@ public class TestRun extends BaseEntity {
 
     // 테스트 런이 속한 프로젝트 식별자
     private final ProjectId projectId;
-
-    // 테스트 런이 연결된 마일스톤 식별자
-    private final MilestoneId milestoneId;
 
     // 테스트 런 이름
     private String name;
@@ -46,21 +42,18 @@ public class TestRun extends BaseEntity {
      *
      * @param id          테스트 런 식별자
      * @param projectId   프로젝트 식별자
-     * @param milestoneId 연결된 마일스톤 식별자
      * @param name        테스트 런 이름
      * @param description 테스트 런 설명
      * @param status      테스트 런 상태
      */
     public TestRun(TestRunId id,
                    ProjectId projectId,
-                   MilestoneId milestoneId,
                    String name,
                    String description,
                    TestRunStatus status) {
         super();
         this.id = id;
         this.projectId = projectId;
-        this.milestoneId = milestoneId;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -71,7 +64,6 @@ public class TestRun extends BaseEntity {
      *
      * @param id             테스트 런 식별자
      * @param projectId      프로젝트 식별자
-     * @param milestoneId    연결된 마일스톤 식별자
      * @param name           테스트 런 이름
      * @param description    테스트 런 설명
      * @param status         테스트 런 상태
@@ -85,7 +77,6 @@ public class TestRun extends BaseEntity {
      */
     public TestRun(TestRunId id,
                    ProjectId projectId,
-                   MilestoneId milestoneId,
                    String name,
                    String description,
                    TestRunStatus status,
@@ -98,7 +89,6 @@ public class TestRun extends BaseEntity {
                    String shareAiSummary) {
         this.id = id;
         this.projectId = projectId;
-        this.milestoneId = milestoneId;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -112,8 +102,6 @@ public class TestRun extends BaseEntity {
     public TestRunId getId() { return id; }
 
     public ProjectId getProjectId() { return projectId; }
-
-    public MilestoneId getMilestoneId() { return milestoneId; }
 
     public String getName() { return name; }
 
