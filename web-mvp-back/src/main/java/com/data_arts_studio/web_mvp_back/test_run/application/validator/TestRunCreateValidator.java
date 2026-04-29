@@ -1,5 +1,9 @@
 package com.data_arts_studio.web_mvp_back.test_run.application.validator;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.milestone.application.exception.MilestoneBusinessException;
@@ -7,29 +11,24 @@ import com.data_arts_studio.web_mvp_back.milestone.application.exception.Milesto
 import com.data_arts_studio.web_mvp_back.milestone.domain.Milestone;
 import com.data_arts_studio.web_mvp_back.test_run.application.exception.TestRunBusinessException;
 import com.data_arts_studio.web_mvp_back.test_run.application.exception.TestRunErrorCode;
-import com.data_arts_studio.web_mvp_back.test_run.application.port.out.CheckTestRunNamePort;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * 테스트 런 생성 요청의 유효성을 검증
  */
 @Component
-@RequiredArgsConstructor
 public class TestRunCreateValidator {
-    private final CheckTestRunNamePort checkTestRunNamePort;
 
     /**
-     * 테스트 런 생성 요청의 필수 입력값과 이름 중복 여부를 검증
+     * 테스트 런 생성 요청의 필수 입력값을 검증
      *
      * @param projectId 프로젝트 식별자
      * @param name 테스트 런 이름
-     * @param milestoneId 선택된 마일스톤 식별자
+     * @param milestoneIds 선택된 마일스톤 식별자 목록
      */
-    public void validate(String projectId, String name, String milestoneId) {
+    public void validate(String projectId, String name, List<String> milestoneIds) {
         validateName(name);
-        validateMilestoneId(milestoneId);
-        validateNameDuplicated(projectId, name);
+        validateMilestoneIds(milestoneIds);
+        validateDuplicatedMilestoneIds(milestoneIds);
     }
 
     /**
@@ -56,25 +55,32 @@ public class TestRunCreateValidator {
     }
 
     /**
-     * 마일스톤 선택 여부를 검증
+     * 마일스톤 선택 여부와 빈 식별자 포함 여부를 검증
      *
-     * @param milestoneId 선택된 마일스톤 식별자
+     * @param milestoneIds 선택된 마일스톤 식별자 목록
      */
-    private void validateMilestoneId(String milestoneId) {
-        if (milestoneId == null || milestoneId.isBlank()) {
+    private void validateMilestoneIds(List<String> milestoneIds) {
+        if (milestoneIds == null || milestoneIds.isEmpty()) {
             throw new TestRunBusinessException(TestRunErrorCode.TEST_RUN_MILESTONES_EMPTY);
+        }
+        if (milestoneIds.stream().anyMatch(milestoneId -> milestoneId == null || milestoneId.isBlank())) {
+            throw new TestRunBusinessException(TestRunErrorCode.TEST_RUN_INVALID);
         }
     }
 
     /**
-     * 같은 프로젝트 내 테스트 런 이름 중복 여부를 검증
+     * 하나의 테스트 런 안에 동일한 마일스톤이 중복 선택되지 않았는지 검증
      *
-     * @param projectId 프로젝트 식별자
-     * @param name 테스트 런 이름
+     * @param milestoneIds 선택된 마일스톤 식별자 목록
      */
-    private void validateNameDuplicated(String projectId, String name) {
-        if (checkTestRunNamePort.isTestRunNameDuplicated(projectId, name)) {
-            throw new TestRunBusinessException(TestRunErrorCode.TEST_RUN_NAME_DUPLICATED);
+    private void validateDuplicatedMilestoneIds(List<String> milestoneIds) {
+        Set<String> distinctMilestoneIds = new HashSet<>();
+        for (String milestoneId : milestoneIds) {
+            // 같은 마일스톤이 두 번 이상 들어오면 차단 
+            if (!distinctMilestoneIds.add(milestoneId)) {
+                throw new TestRunBusinessException(TestRunErrorCode.TEST_RUN_MILESTONES_DUPLICATED);
+            }
         }
     }
+
 }
