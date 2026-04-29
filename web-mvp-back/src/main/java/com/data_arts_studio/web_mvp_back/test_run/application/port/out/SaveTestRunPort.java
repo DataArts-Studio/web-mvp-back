@@ -15,12 +15,11 @@ public interface SaveTestRunPort {
      * 테스트 런 레코드를 생성
      *
      * @param projectId 프로젝트 식별자
-     * @param milestoneIds 기준 마일스톤 식별자 목록
      * @param name 테스트 런 이름
      * @param description 테스트 런 설명
      * @return 저장된 테스트 런 도메인 모델
      */
-    TestRun createTestRun(String projectId, List<String> milestoneIds, String name, String description);
+    TestRun createTestRun(String projectId, String name, String description);
 
     /**
      * 테스트 런과 마일스톤 연결 snapshot을 생성
