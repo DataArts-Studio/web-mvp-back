@@ -1,5 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -38,9 +39,6 @@ public class TestRunJpaEntity {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "milestone_id")
-    private UUID milestoneId;
-
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
@@ -53,4 +51,14 @@ public class TestRunJpaEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "lifecycle_status", nullable = false)
     private LifecycleStatus lifecycleStatus;
+
+    @Column(name = "share_token")
+    private String shareToken;
+
+    @Column(name = "share_expires_at")
+    private LocalDateTime shareExpiresAt;
+
+    // TODO(schema): 실제 DB에 share_ai_summary 컬럼이 반영되면 매핑을 복구할 것.
+    // @Column(name = "share_ai_summary")
+    // private String shareAiSummary;
 }
