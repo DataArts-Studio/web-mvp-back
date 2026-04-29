@@ -51,11 +51,12 @@ public class MilestoneTestScopeFactory {
         Map<String, TestCaseTestRunScopeItem> scopeItemsByTestCaseId = new LinkedHashMap<>();
         // 스위트에 연결된 테스트 케이스를 먼저 수집해, 중복 시 스위트 경로가 우선되도록 처리
         for (TestSuite suite : activeSuites) {
+            String sourceMilestoneId = source.milestoneIdBySuiteId().get(suite.getId().getId());
             source.suiteTestCaseIdsBySuiteId()
                     .getOrDefault(suite.getId().getId(), List.of())
                     .forEach(testCaseId -> scopeItemsByTestCaseId.putIfAbsent(
                             testCaseId,
-                            new TestCaseTestRunScopeItem(testCaseId, "suite", suite.getId().getId())));
+                            new TestCaseTestRunScopeItem(testCaseId, "milestone", sourceMilestoneId)));
         }
 
         // 마일스톤에 직접 연결된 테스트 케이스는 이후에 추가해, 이미 스위트 경로가 있으면 덮어쓰지 않음
