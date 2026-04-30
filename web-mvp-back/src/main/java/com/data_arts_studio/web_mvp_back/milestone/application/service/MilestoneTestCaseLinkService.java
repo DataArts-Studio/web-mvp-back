@@ -14,7 +14,7 @@ import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.R
 import com.data_arts_studio.web_mvp_back.milestone.application.port.in.usecase.ReplaceMilestoneTestCasesUseCase;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.AssignTestCaseToMilestonePort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.LoadMilestonePort;
-import com.data_arts_studio.web_mvp_back.milestone.application.port.out.MilestoneQueryPort;
+import com.data_arts_studio.web_mvp_back.milestone.application.port.out.MilestoneTestCaseQueryPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.RemoveTestCaseFromMilestonePort;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.ReplaceMilestoneTestCasesPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.service.result.GetMilestoneTestCasesResult;
@@ -37,7 +37,7 @@ public class MilestoneTestCaseLinkService implements AssignTestCaseToMilestoneUs
     private final ReplaceMilestoneTestCasesPort replaceMilestoneTestCasesPort;
     private final RemoveTestCaseFromMilestonePort removeTestCaseFromMilestonePort;
     private final LoadMilestonePort loadMilestonePort;
-    private final MilestoneQueryPort milestoneQueryPort;
+    private final MilestoneTestCaseQueryPort milestoneTestCaseQueryPort;
 
     /**
      * 마일스톤에 테스트 케이스 한 건 연결
@@ -82,7 +82,7 @@ public class MilestoneTestCaseLinkService implements AssignTestCaseToMilestoneUs
                 .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND));
         return GetMilestoneTestCasesResult.builder()
                 .milestoneId(milestoneId)
-                .items(milestoneQueryPort.findTestCases(milestoneId))
+                .items(milestoneTestCaseQueryPort.findTestCases(milestoneId))
                 .build();
     }
 }
