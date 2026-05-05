@@ -4,8 +4,10 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import com.data_arts_studio.web_mvp_back.shared.LifecycleStatus;
+import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.converter.ResultStatusConverter;
 import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -63,7 +65,7 @@ public class TestCaseJpaEntity {
     @Column(name = "sort_order")
     private int sortOrder;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ResultStatusConverter.class)
     @Column(name = "result_status")
     private ResultStatus resultStatus;
 
