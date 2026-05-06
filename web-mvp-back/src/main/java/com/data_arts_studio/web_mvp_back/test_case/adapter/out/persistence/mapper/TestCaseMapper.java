@@ -29,7 +29,6 @@ public class TestCaseMapper {
                 .steps(testCase.getSteps())
                 .expectedResult(testCase.getExpectedResult())
                 .sortOrder(testCase.getSortOrder())
-                .resultStatus(testCase.getResultStatus())
                 .lifecycleStatus(testCase.getLifecycleStatus())
                 .createdAt(testCase.getCreatedAt())
                 .updatedAt(testCase.getUpdatedAt())
@@ -52,7 +51,6 @@ public class TestCaseMapper {
                 entity.getSteps(),
                 entity.getExpectedResult(),
                 entity.getSortOrder(),
-                entity.getResultStatus(),
                 // BaseEntity 감사 필드 복원
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
