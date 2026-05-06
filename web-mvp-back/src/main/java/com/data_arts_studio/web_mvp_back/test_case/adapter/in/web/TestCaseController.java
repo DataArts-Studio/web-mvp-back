@@ -59,12 +59,10 @@ public class TestCaseController {
                 .id(result.id())
                 .caseKey(result.caseKey())
                 .projectId(result.projectId())
-
                 .testSuiteId(result.testSuiteId())
                 .testSuiteName(result.testSuiteName())
                 .name(result.name())
                 .testType(result.testType())
-                .resultStatus(result.status().name())
                 .tags(result.tags())
                 .preCondition(result.preCondition())
                 .steps(result.steps())
@@ -95,7 +93,6 @@ public class TestCaseController {
                 .id(result.id())
                 .projectId(result.projectId())
                 .caseKey(result.caseKey())
-                .resultStatus(result.resultStatus())
                 .name(result.name())
                 .testSuiteId(result.testSuiteId())
                 .testSuiteName(result.testSuiteName())
@@ -117,6 +114,8 @@ public class TestCaseController {
     public ResponseEntity<UpdateTestCaseResponse> updateTestCase(@PathVariable("projectId") String projectId, 
                                                                  @PathVariable("testCaseId") String testCaseId,
                                                                  @RequestBody UpdateTestCaseRequest request) {
+        // TODO(authz): projectId를 command/service까지 내려서 수정 대상 테스트 케이스의 프로젝트 소속을 반드시 검증할 것.
+        // TODO(validation): 기능 안정화 후 요청 DTO에 Bean Validation과 @Valid를 적용할 것.
         // 테스트 스위트 아이디 정규화 (빈 값일 경우 null로 변환)
         String normalizedTestSuiteId = normalizeOptionalId(request.testSuiteId());
         UpdateTestCaseCommand command = UpdateTestCaseCommand.builder()
@@ -134,12 +133,10 @@ public class TestCaseController {
                 .id(result.id())
                 .caseKey(result.caseKey())
                 .projectId(result.projectId())
-
                 .testSuiteId(result.testSuiteId())
                 .testSuiteName(result.testSuiteName())
                 .name(result.name())
                 .testType(result.testType())
-                .resultStatus(result.status().name())
                 .tags(result.tags())
                 .preCondition(result.preCondition())
                 .steps(result.steps())
@@ -153,6 +150,7 @@ public class TestCaseController {
     // 프로젝트 아카이브
     @PatchMapping("/{testCaseId}/archive")
     public ResponseEntity<Void> archiveTestCase(@PathVariable String projectId, @PathVariable String testCaseId) {
+        // TODO(authz): projectId가 실제 아카이브 대상 testCase의 소속 프로젝트와 일치하는지 서비스에서 검증할 것.
         archiveTestCaseUseCase.archiveTestCase(new ArchiveTestCaseCommand(projectId, testCaseId));
         // 처리 성공시 200 OK (추 후 변경)
         return ResponseEntity.ok().build();

@@ -13,7 +13,6 @@ import java.util.List;
  * @param testSuiteName   테스트 스위트 이름
  * @param name            테스트 케이스 이름
  * @param testType       테스트 케이스 유형
- * @param resultStatus   테스트 케이스 결과 상태
  * @param tags            테스트 케이스 태그 목록
  * @param preCondition    테스트 케이스 사전 조건
  * @param steps           테스트 케이스 수행 단계
@@ -32,7 +31,6 @@ public record CreateTestCaseResponse(
 
     String name,
     String testType,
-    String resultStatus,
 
     List<String> tags,
     String preCondition,

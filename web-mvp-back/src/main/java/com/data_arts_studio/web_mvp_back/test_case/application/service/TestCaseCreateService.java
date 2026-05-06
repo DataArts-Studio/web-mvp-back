@@ -10,7 +10,6 @@ import com.data_arts_studio.web_mvp_back.test_case.application.port.out.Generate
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.SaveTestCasePort;
 import com.data_arts_studio.web_mvp_back.test_case.application.service.result.CreateTestCaseResult;
 import com.data_arts_studio.web_mvp_back.test_case.application.validator.CreateTestCaseValidator;
-import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCase;
 import com.data_arts_studio.web_mvp_back.test_case.domain.TestCaseId;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.LoadTestSuitePort;
@@ -70,7 +69,6 @@ public class TestCaseCreateService implements CreateTestCaseUseCase{
             caseKey,
             command.name(),
             command.testType(),
-            ResultStatus.UNTESTED,
             command.tags(),
             command.preCondition(),
             command.steps(),

@@ -9,7 +9,6 @@ import lombok.Builder;
  * @param id               테스트 케이스 식별자
  * @param projectId        소속 프로젝트 식별자
  * @param caseKey          테스트 케이스 키
- * @param resultStatus     테스트 케이스 결과 상태
  * @param name             테스트 케이스 이름
  * @param testSuiteId      소속 테스트 스위트 식별자
  * @param testSuiteName    소속 테스트 스위트 이름
@@ -25,9 +24,7 @@ import lombok.Builder;
 public record TestCaseDetailRespose(
     String id,
     String projectId,
-
     String caseKey,
-    String resultStatus,
     String name,
     // 스위트 정보
     String testSuiteId,
@@ -36,9 +33,7 @@ public record TestCaseDetailRespose(
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
     List<String> tags,
-
     String preCondition,
     String steps,
     String expectedResult
-    
 ) {} 

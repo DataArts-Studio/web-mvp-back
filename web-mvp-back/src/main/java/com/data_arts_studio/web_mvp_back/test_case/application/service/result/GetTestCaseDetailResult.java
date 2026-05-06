@@ -9,7 +9,6 @@ public record GetTestCaseDetailResult(
     String id,
     String projectId,
     String caseKey,
-    String resultStatus,
     String name,
     String testSuiteId,
     String testSuiteName,

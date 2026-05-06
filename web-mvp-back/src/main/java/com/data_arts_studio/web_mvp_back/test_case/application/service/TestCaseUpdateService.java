@@ -2,7 +2,6 @@ package com.data_arts_studio.web_mvp_back.test_case.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.command.UpdateTestCaseCommand;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.in.usecase.UpdateTestCaseUseCase;
 import com.data_arts_studio.web_mvp_back.test_case.application.port.out.LoadTestCasePort;
@@ -33,6 +32,7 @@ public class TestCaseUpdateService implements UpdateTestCaseUseCase{
 
         testCaseUpdateValidator.validate(command);
         TestCaseId testCaseId = new TestCaseId(command.testCaseId());
+        // TODO(authz): 수정 시 projectId/actor 정보를 함께 받아 다른 프로젝트 테스트 케이스 수정이 불가능하도록 검증할 것.
         TestCase testCase = loadTestCasePort.loadTestCase(testCaseId)
                         .orElseThrow(() -> new TestCaseBusinessException(TestCaseErrorCode.TESTCASE_ID_NOT_FOUND));
 
@@ -61,7 +61,6 @@ public class TestCaseUpdateService implements UpdateTestCaseUseCase{
             testCase.getCaseKey(),
             testCase.getName(),
             testCase.getTestType(),
-            testCase.getResultStatus(),
             testCase.getTags(),
             testCase.getPreCondition(),
             testCase.getSteps(),
