@@ -6,16 +6,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
+
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaRepository;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.SuiteTestCaseJpaEntity;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.SuiteTestCaseJpaRepository;
-import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.TestSuiteJpaRepository;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.entity.SuiteTestCaseJpaEntity;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.repository.SuiteTestCaseJpaRepository;
+import com.data_arts_studio.web_mvp_back.test_suite.adapter.out.persistence.jpa.repository.TestSuiteJpaRepository;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.AssignTestCaseToSuitePort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.LoadSuiteTestCaseLinksPort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.RemoveTestCaseFromSuitePort;
 import com.data_arts_studio.web_mvp_back.test_suite.application.port.out.ReplaceSuiteTestCasesPort;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -33,6 +35,7 @@ public class SuiteTestCasePersistenceAdapter implements AssignTestCaseToSuitePor
     private final SuiteTestCaseJpaRepository suiteTestCaseJpaRepository;
     private final TestSuiteJpaRepository testSuiteJpaRepository;
     private final TestCaseJpaRepository testCaseJpaRepository;
+    private final EntityManager entityManager;
 
     /**
      * 스위트에 테스트케이스 링크 1건을 추가
@@ -104,8 +107,17 @@ public class SuiteTestCasePersistenceAdapter implements AssignTestCaseToSuitePor
     @Override
     public List<String> loadTestCaseIdsBySuite(String projectId, String suiteId) {
         validateSuiteInProject(projectId, suiteId);
-        return suiteTestCaseJpaRepository.findAllBySuiteId(UUID.fromString(suiteId)).stream()
-                .map(link -> link.getTestCaseId().toString())
+        Query query = entityManager.createNativeQuery("""
+                SELECT tc.id
+                FROM suite_test_cases stc
+                JOIN test_cases tc ON tc.id = stc.test_case_id
+                WHERE stc.suite_id = :suiteId
+                  AND tc.archived_at IS NULL
+                ORDER BY tc.sort_order ASC, tc.created_at ASC
+                """);
+        query.setParameter("suiteId", UUID.fromString(suiteId));
+        return query.getResultList().stream()
+                .map(Object::toString)
                 .toList();
     }
 
@@ -118,6 +130,7 @@ public class SuiteTestCasePersistenceAdapter implements AssignTestCaseToSuitePor
     private void validateSuiteInProject(String projectId, String suiteId) {
         boolean exists = testSuiteJpaRepository.findByIdAndProjectId(UUID.fromString(suiteId), UUID.fromString(projectId)).isPresent();
         if (!exists) {
+            // TODO(exception): IllegalArgumentException 대신 도메인 예외로 통일해 권한/존재 여부 응답 정책을 일관되게 맞출 것.
             throw new IllegalArgumentException("프로젝트 내 테스트 스위트를 찾을 수 없습니다.");
         }
     }
@@ -130,6 +143,7 @@ public class SuiteTestCasePersistenceAdapter implements AssignTestCaseToSuitePor
      */
     private void validateTestCaseInProject(String projectId, String testCaseId) {
         TestCaseJpaEntity testCase = testCaseJpaRepository.findById(UUID.fromString(testCaseId))
+                // TODO(exception): IllegalArgumentException 대신 도메인 예외로 통일해 권한/존재 여부 응답 정책을 일관되게 맞출 것.
                 .orElseThrow(() -> new IllegalArgumentException("프로젝트 내 테스트 케이스를 찾을 수 없습니다."));
         if (!projectId.equals(testCase.getProjectId().toString())) {
             throw new IllegalArgumentException("프로젝트 내 테스트 케이스를 찾을 수 없습니다.");
