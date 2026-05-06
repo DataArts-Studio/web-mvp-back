@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
-import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.mapper.TestRunMapper;
 import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.entity.TestCaseRunJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.entity.TestRunJpaEntity;
@@ -22,6 +21,7 @@ import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.re
 import com.data_arts_studio.web_mvp_back.test_run.application.port.out.SaveTestRunPort;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRun;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRunId;
+import com.data_arts_studio.web_mvp_back.test_run.domain.TestCaseRunStatus;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRunStatus;
 import com.data_arts_studio.web_mvp_back.test_run.domain.scope.item.TestCaseTestRunScopeItem;
 import com.data_arts_studio.web_mvp_back.test_run.domain.scope.item.TestSuiteTestRunScopeItem;
@@ -118,7 +118,7 @@ public class TestRunPersistenceAdapter implements SaveTestRunPort {
                         UUID.randomUUID(),
                         UUID.fromString(testRunId),
                         UUID.fromString(testCaseRun.testCaseId()),
-                        ResultStatus.UNTESTED.getDbValue(),
+                        TestCaseRunStatus.UNTESTED.getDbValue(),
                         null,
                         null,
                         testCaseRun.sourceType(),
