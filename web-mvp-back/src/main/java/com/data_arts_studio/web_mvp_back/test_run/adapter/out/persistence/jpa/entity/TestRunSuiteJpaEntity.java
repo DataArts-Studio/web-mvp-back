@@ -1,4 +1,6 @@
-package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa;
+package com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.entity;
+
+import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.id.TestRunSuiteJpaId;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

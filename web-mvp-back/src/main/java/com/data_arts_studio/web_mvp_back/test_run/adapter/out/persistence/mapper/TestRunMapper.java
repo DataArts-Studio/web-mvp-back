@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.data_arts_studio.web_mvp_back.project.domain.ProjectId;
-import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.TestRunJpaEntity;
+import com.data_arts_studio.web_mvp_back.test_run.adapter.out.persistence.jpa.entity.TestRunJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRun;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRunId;
 import com.data_arts_studio.web_mvp_back.test_run.domain.TestRunStatus;
