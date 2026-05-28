@@ -25,13 +25,10 @@ public record CreateTestCaseResponse(
     String id,
     String caseKey,
     String projectId,
-
     String testSuiteId,
     String testSuiteName,
-
     String name,
     String testType,
-
     List<String> tags,
     String preCondition,
     String steps,

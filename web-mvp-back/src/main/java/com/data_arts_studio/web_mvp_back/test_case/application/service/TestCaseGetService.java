@@ -48,7 +48,6 @@ public class TestCaseGetService implements GetTestCaseUseCase {
                 .id(testCase.getId().getId())
                 .projectId(testCase.getProjectId().getId())
                 .caseKey(testCase.getCaseKey())
-                .resultStatus(testCase.getResultStatus().name())
                 .name(testCase.getName())
                 .testSuiteId(testCase.getTestSuiteId() != null ? testCase.getTestSuiteId().getId() : null)
                 .testSuiteName(testSuiteName)

@@ -1,7 +1,6 @@
 package com.data_arts_studio.web_mvp_back.test_case.application.service.result;
 
 import java.util.List;
-import com.data_arts_studio.web_mvp_back.test_case.domain.ResultStatus;
 import lombok.Builder;
 
 
@@ -14,7 +13,6 @@ import lombok.Builder;
  * @param caseKey         테스트 케이스 키
  * @param name            테스트 케이스 이름
  * @param testType       테스트 케이스 유형
- * @param status          테스트 케이스 상태
  * @param tags            테스트 케이스 태그 목록
  * @param preCondition    테스트 케이스 사전 조건
  * @param steps           테스트 케이스 수행 단계
@@ -29,7 +27,6 @@ public record CreateTestCaseResult(
     String caseKey,      
     String name,         
     String testType,      
-    ResultStatus status, 
     List<String> tags,        
     String preCondition,  
     String steps,         
