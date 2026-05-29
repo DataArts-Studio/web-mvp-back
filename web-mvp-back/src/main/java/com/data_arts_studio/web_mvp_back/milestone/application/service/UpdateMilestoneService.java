@@ -37,6 +37,7 @@ public class UpdateMilestoneService implements UpdateMilestoneUseCase {
     public UpdateMilestoneResult updateMilestone(UpdateMilestoneCommand command) {
         MilestoneId milestoneId = new MilestoneId(command.milestoneId());
 
+        // TODO(authz): 인증 도입 후에는 milestoneId만 조회하지 말고 호출자/프로젝트 소속까지 함께 검증할 것.
         Milestone milestone = loadMilestonePort.loadById(milestoneId)
                 .orElseThrow(() -> new MilestoneBusinessException(MilestoneErrorCode.MILESTONE_NOT_FOUND));
         String projectId = milestone.getProjectId().getId();
