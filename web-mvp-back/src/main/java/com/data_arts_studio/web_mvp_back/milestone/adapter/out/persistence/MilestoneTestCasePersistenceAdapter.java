@@ -12,6 +12,7 @@ import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.e
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.id.MilestoneTestCaseJpaId;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.repository.MilestoneJpaRepository;
 import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.jpa.repository.MilestoneTestCaseJpaRepository;
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.sql.MilestoneTestCaseSql;
 import com.data_arts_studio.web_mvp_back.milestone.application.exception.MilestoneBusinessException;
 import com.data_arts_studio.web_mvp_back.milestone.application.exception.MilestoneErrorCode;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.AssignTestCaseToMilestonePort;
@@ -21,6 +22,8 @@ import com.data_arts_studio.web_mvp_back.milestone.application.port.out.ReplaceM
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaEntity;
 import com.data_arts_studio.web_mvp_back.test_case.adapter.out.persistence.jpa.TestCaseJpaRepository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -36,6 +39,7 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
     private final MilestoneTestCaseJpaRepository milestoneTestCaseJpaRepository;
     private final MilestoneJpaRepository milestoneJpaRepository;
     private final TestCaseJpaRepository testCaseJpaRepository;
+    private final EntityManager entityManager;
 
     @Override
     /**
@@ -108,9 +112,10 @@ public class MilestoneTestCasePersistenceAdapter implements AssignTestCaseToMile
     public List<String> loadTestCaseIdsByMilestone(String milestoneId) {
         UUID milestoneUuid = UUID.fromString(milestoneId);
         loadActiveMilestone(milestoneUuid);
-        // EmbeddedId 내부의 testCaseId만 꺼내서 응용 계층이 바로 쓸 수 있는 문자열 목록으로 변환
-        return milestoneTestCaseJpaRepository.findAllByIdMilestoneId(milestoneUuid).stream()
-                .map(link -> link.getId().getTestCaseId().toString())
+        Query query = entityManager.createNativeQuery(MilestoneTestCaseSql.FIND_DIRECT_TEST_CASE_IDS_BY_MILESTONE_ID);
+        query.setParameter("milestoneId", milestoneUuid);
+        return query.getResultList().stream()
+                .map(Object::toString)
                 .toList();
     }
 
