@@ -23,6 +23,7 @@ public class ArchiveTestCaseService implements ArchiveTestCaseUseCase {
 
    @Override
    public void archiveTestCase(ArchiveTestCaseCommand command) {
+      // TODO(authz): command.projectId()와 실제 testCase.projectId가 일치하는지 검증하고, 추후 호출자 권한도 함께 확인할 것.
       TestCase testCase = loadTestCasePort.loadTestCase(new TestCaseId(command.testCaseId()))
                   // TODO: 추 후 커스텀된 에러 메세지 입력
                   .orElseThrow(() -> new IllegalArgumentException("테스트 케이스를 찾을 수 없습니다."));

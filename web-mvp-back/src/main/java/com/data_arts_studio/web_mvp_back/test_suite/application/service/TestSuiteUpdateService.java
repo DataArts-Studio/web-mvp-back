@@ -28,6 +28,7 @@ public class TestSuiteUpdateService implements UpdateTestSuiteUseCase{
 
         testSuiteUpdateValidator.validate(command);
         TestSuiteId testSuiteId = new TestSuiteId(command.id());
+        // TODO(authz): loadById만 쓰지 말고 command.projectId()와의 소속 일치 여부를 보장하는 조회/검증으로 확장할 것.
         TestSuite testSuite = loadTestSuitePort.loadById(testSuiteId).orElseThrow(() -> new TestSuiteBusinessException(TestSuiteErrorCode.TEST_SUITE_ID_NOT_FOUND));
         testSuite.rename(command.name());
         saveTestSuitePort.updateTestSuite(testSuite);
