@@ -66,7 +66,6 @@ public class TestRunCreateService implements CreateTestRunUseCase {
         // 테스트 런 레코드 생성
         TestRun testRun = saveTestRunPort.createTestRun(
                 normalizedCommand.projectId(),
-                normalizedCommand.milestoneIds(),
                 normalizedCommand.name(),
                 normalizedCommand.description());
 
