@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.data_arts_studio.web_mvp_back.milestone.adapter.out.persistence.sql.MilestoneStatisticsSql;
 import com.data_arts_studio.web_mvp_back.milestone.application.port.out.MilestoneStatisticsQueryPort;
 import com.data_arts_studio.web_mvp_back.milestone.application.service.result.MilestoneStatisticsResult;
 
@@ -34,43 +35,7 @@ public class MilestoneStatisticsQueryAdapter implements MilestoneStatisticsQuery
             return Map.of();
         }
 
-        // TODO: 마일스톤 케이스 범위 합집합 기준이 다른 조회 쿼리와 중복되므로 리펙토링이 필요함
-        Query query = entityManager.createNativeQuery("""
-                WITH target_test_cases AS (
-                    SELECT mtc.milestone_id, mtc.test_case_id
-                    FROM milestone_test_cases mtc
-                    WHERE mtc.milestone_id IN (:milestoneIds)
-                    UNION
-                    SELECT mts.milestone_id, stc.test_case_id
-                    FROM milestone_test_suites mts
-                    JOIN test_suites ts ON ts.id = mts.test_suite_id
-                     AND ts.archived_at IS NULL
-                    JOIN suite_test_cases stc ON stc.suite_id = mts.test_suite_id
-                    WHERE mts.milestone_id IN (:milestoneIds)
-                )
-                SELECT target.milestone_id,
-                       COUNT(DISTINCT target.test_case_id) AS total_count,
-                       COUNT(DISTINCT CASE WHEN COALESCE(latest.status, 'untested') IN ('pass', 'fail', 'blocked')
-                                           THEN target.test_case_id END) AS completed_count,
-                       COALESCE(run_stats.test_run_count, 0) AS test_run_count
-                FROM target_test_cases target
-                JOIN test_cases tc ON tc.id = target.test_case_id AND tc.archived_at IS NULL
-                LEFT JOIN LATERAL (
-                    SELECT tcr.status
-                    FROM test_case_runs tcr
-                    WHERE tcr.test_case_id = target.test_case_id
-                    ORDER BY tcr.created_at DESC, tcr.id DESC
-                    LIMIT 1
-                ) latest ON true
-                LEFT JOIN (
-                    SELECT tr.milestone_id, COUNT(*) AS test_run_count
-                    FROM test_runs tr
-                    WHERE tr.archived_at IS NULL
-                      AND tr.milestone_id IN (:milestoneIds)
-                    GROUP BY tr.milestone_id
-                ) run_stats ON run_stats.milestone_id = target.milestone_id
-                GROUP BY target.milestone_id, run_stats.test_run_count
-                """);
+        Query query = entityManager.createNativeQuery(MilestoneStatisticsSql.findStatisticsByMilestoneIds());
         query.setParameter("milestoneIds", milestoneIds.stream().map(UUID::fromString).toList());
 
         List<?> rawRows = query.getResultList();
