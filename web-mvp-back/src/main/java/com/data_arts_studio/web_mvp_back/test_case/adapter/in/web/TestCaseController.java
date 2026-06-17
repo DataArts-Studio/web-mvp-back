@@ -40,7 +40,13 @@ public class TestCaseController {
     private final UpdateTestCaseUseCase updateTestCaseUseCase;
     private final GetTestCaseUseCase getTestCaseUseCase;
     private final ArchiveTestCaseUseCase archiveTestCaseUseCase;
-
+    
+    /**
+     * 테스트 케이스 생성 API
+     * @param projectId
+     * @param request
+     * @return 생성된 테스트 케이스 정보 응답
+     */
     @PostMapping
     public ResponseEntity<CreateTestCaseResponse> createTestCase(@PathVariable("projectId") String projectId, @RequestBody CreateTestCaseRequest request) {
     String normalizedTestSuiteId = normalizeOptionalId(request.testSuiteId());
@@ -147,7 +153,7 @@ public class TestCaseController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    // 프로젝트 아카이브
+    // 테스트 케이스 아카이브
     @PatchMapping("/{testCaseId}/archive")
     public ResponseEntity<Void> archiveTestCase(@PathVariable String projectId, @PathVariable String testCaseId) {
         // TODO(authz): projectId가 실제 아카이브 대상 testCase의 소속 프로젝트와 일치하는지 서비스에서 검증할 것.
